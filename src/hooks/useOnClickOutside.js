@@ -1,5 +1,5 @@
 // https://usehooks.com/useOnClickOutside/
-import React, {useEffect} from 'react'
+import {useEffect} from 'react'
 
 // Hook
 export default function useOnClickOutside(ref, handler) {

@@ -1,21 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './styles.css';
 import * as d3 from 'd3'
-import { formatNestedData } from '../../services/format/formatters'
-
 let margin = { top: 20, left: 25 };
-
-// let yScale = d3.scaleBand().padding(0.1)
-
-// let xScale = d3.scaleLinear().domain([0, 100]).range([0,1100 - margin.left]);
-
-
-// let xAxis = g => g.attr("transform", "translate(200,0)")
-//     .call(d3.axisBottom(xScale)).call(g => { g.select(".domain").remove()});
 
 const BarChart = (props) => {
   console.log('BarChart - props', props)
-  const [data, setData] = useState([])
   const [height, setHeight] = useState('')
   const svgRef = useRef();
   const gRef = useRef()
