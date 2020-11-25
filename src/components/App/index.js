@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useReducer } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import './styles.css';
 // COMPONENTS
 import TopParks from '../ParkInfo/TopParks';
@@ -7,7 +7,6 @@ import Title from '../Title';
 import Map from '../Map';
 import BarChart from '../BarChart'
 // HELPERS
-import { filterTopParks } from '../../helpers';
 import { formatData } from '../../services/format/formatters'
 // CUSTOM HOOKS
 import useDataApi from '../../hooks/useDataApi';

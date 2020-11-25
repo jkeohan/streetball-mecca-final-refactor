@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, memo } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import './styles.css';
 import useOnClickOutside from '../../hooks/useOnClickOutside'
 
@@ -41,20 +41,16 @@ const Input = ({dispatch,allParks,activeParks, reset}) => {
     setIsVisible(false)
     if(activeParks.length > 2 || reset) {
         setVal('')
-    } else if(activeParks.length == 1) {
+    } else if(activeParks.length === 1) {
       setVal(activeParks[0].name)
     }
     // setVal('')
-  }, [activeParks])
+  }, [activeParks, reset])
 
   // useEffect(() => {
   //   setVal()
   // }, [val])
 
-  const styles = {
-    display: isVisible ? 'block' : 'none'
-  }
-  
   return (
     <>
     <form>
