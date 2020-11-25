@@ -7,9 +7,7 @@ const BarChart = (props) => {
   console.log('BarChart - props', props)
   const [height, setHeight] = useState('')
   const svgRef = useRef();
-  const gRef = useRef()
   const xAxisRef = useRef()
-  const svgHeight = useRef();
 
   let yScale = d3.scaleBand().padding(0.1)
 
@@ -42,9 +40,9 @@ let xAxis = g => g.attr("transform", "translate(200,0)")
     //  let left = e.layerX + 10;
      let tooltip = d3.select('.circleToolTip')
     console.log('circleToolTip - tooltip', tooltip)
-     let title = d3.select('.circleToolTip .title').text(d.name)
-     let neighborhood = d3.select('.circleToolTip .neighborhood').text(`${d.neighborhood}, ${d.borough}`)
-     let avg = d3.select('.circleToolTip .avg').text(elem => `Overall: ${d.overall}/100`)
+     d3.select('.circleToolTip .title').text(d.name)
+     d3.select('.circleToolTip .neighborhood').text(`${d.neighborhood}, ${d.borough}`)
+     d3.select('.circleToolTip .avg').text(elem => `Overall: ${d.overall}/100`)
      tooltip
        .style('top', (top) + 'px')
        .style('left', left + 'px')
@@ -164,10 +162,6 @@ let xAxis = g => g.attr("transform", "translate(200,0)")
 
   const svgStyles = {
     height: `${height}px`
-  }
-  // console.log('BarChart - svgStyles', svgStyles, svgHeight.current)
-  const gStyles = {
-    transform: "translate(10,0)"
   }
 
   return (
