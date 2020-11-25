@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
 import './styles.css';
 
-const ParkRating = ({
+const ParkRating = memo(({
   park,
   handleUpdateActivePark,
   handleUpdateParkRating,
@@ -34,6 +34,6 @@ const ParkRating = ({
       </span>
     </li>
   );
-};
+});
 
-export default MemoizedParkRating = memo(ParkRating);
+export default ParkRating
