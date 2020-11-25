@@ -73,9 +73,8 @@ const BarChart = (props) => {
     // let top = event.offsetY;
     // let left = event.offsetX;
     let tooltip = d3.select('.rectToolTip');
-    let title = d3.select('.title').text(d.key);
-    let avg = d3
-      .select('.avg')
+    d3.select('.title').text(d.key);
+    d3.select('.avg')
       .text(`Avg. Overall Rating: ${Math.floor(d.value.avg)}/100`);
     tooltip
       .style('top', top + 20 + 'px')

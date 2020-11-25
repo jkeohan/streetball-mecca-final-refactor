@@ -3,12 +3,13 @@ import * as d3 from 'd3'
 import {nest} from 'd3-collection';
 
 const formatData = (data) => {
-  const boroughs = data.reduce( (acc,d) => {
-    if(!acc.includes(d.gsx$borough.$t)) {
-      acc.push(d.gsx$borough.$t)
-    }
-    return acc
-  },[])
+  // MIGHT NEED TO CREATE AN ARRAY WITH SINGLE INSTANCE BOROUGH NAMES
+  // const boroughs = data.reduce( (acc,d) => {
+  //   if(!acc.includes(d.gsx$borough.$t)) {
+  //     acc.push(d.gsx$borough.$t)
+  //   }
+  //   return acc
+  // },[])
   
   const boroughColors = {
     'Brooklyn': "#306A9C",

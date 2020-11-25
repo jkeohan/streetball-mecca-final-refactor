@@ -11,17 +11,16 @@ const ParkImage = ({ activePark }) => {
   ])
 
   useEffect(() => {
-    const prevImage = images[index]
     if(index){
       setIndex(0)
       setImages(() => [
         images[0] = ({ style }) => <animated.div className='park-image' style={{ ...style, backgroundImage: `url(${activePark.url})` }}></animated.div>,
-        images[1] = prevImage
+        images[1] = images[index]
       ])
     } else {
       setIndex(1)
       setImages(() => [
-        images[0] = prevImage,
+        images[0] = images[index],
         images[1] = ({ style }) => <animated.div className='park-image' style={{ ...style, backgroundImage: `url(${activePark.url})` }}></animated.div>
       ])
     }
