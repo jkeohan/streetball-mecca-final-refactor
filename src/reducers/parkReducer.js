@@ -1,4 +1,4 @@
-import { formatData, formatNestedData  } from '../services/format/formatters';
+import { formatNestedData  } from '../services/format/formatters';
 import { 
   filterTopParks, 
   filterParksByRating, 

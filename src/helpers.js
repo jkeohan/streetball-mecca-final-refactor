@@ -13,5 +13,4 @@ export const filterParksByBorough = (park, filter) => park.borough === filter
 export const filterParksByNeighborhood = (nestedData, filter) => {
   const neighborhood = nestedData.filter( d => d.key === filter)
   return neighborhood
-  console.log('filterParksByNeighborhood - neighborhood', neighborhood, filter)
 }
