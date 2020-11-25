@@ -3,9 +3,6 @@ import './styles.css';
 
 
 const ParkFilter = (props) => {
-  const [isActive, setIsActive] = useState(false)
-  // console.log('ParkFilter', props)
-
   let style = {
     background: props.activeRating === props.name ? 'rgba(155,155,155,.2)' : '',
     color: props.color,
