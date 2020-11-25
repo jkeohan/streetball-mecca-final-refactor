@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import './styles.css';
 
-export default DropDown = (props) => {
+const  DropDown = (props) => {
   const selectRef = useRef();
 
   const handleChange = () => {
@@ -29,3 +29,5 @@ export default DropDown = (props) => {
     </>
   );
 };
+
+export default DropDown
