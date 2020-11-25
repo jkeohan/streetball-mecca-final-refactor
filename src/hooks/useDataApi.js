@@ -26,7 +26,7 @@ const useDataApi = (initialUrl, initialData) => {
       setIsLoading(false);
     };
     makeAPICall();
-  }, [url]);
+  }, [url, initialUrl]);
 
   return [{ data, isLoading }, setUrl];
 };
