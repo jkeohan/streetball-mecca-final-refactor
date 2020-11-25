@@ -1,0 +1,26 @@
+#dashboard-title {
+  align-items: center;
+  border-bottom: 0;
+  display: flex;
+  flex: 0 0 100%;
+  font-style: italic;
+  height: 50px;
+}
+
+#dashboard-title h3 {
+  border-bottom: none;
+  font-size: 30px;
+  text-decoration: none;
+  margin-right:4px;
+}
+
+#dashboard-title h6 {
+  font-size: 20px;
+  margin: 0;
+}
+
+#dashboard-title hr {
+  border: 1px solid;
+  height: 25px;
+  margin: 10px;
+}

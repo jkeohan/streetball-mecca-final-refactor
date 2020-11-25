@@ -1,0 +1,26 @@
+
+#borough {
+  display: flex;
+  flex-direction: column;
+}
+
+#borough select {
+  font-size: 14px;
+  padding: 1px;
+ }
+
+ #boroughs {
+  color: rgba(117, 117, 117);
+ }
+
+ #court,
+#borough {
+  display: flex;
+  flex-direction: column;
+}
+
+
+
+#borough select {
+ font-size: 14px;
+}

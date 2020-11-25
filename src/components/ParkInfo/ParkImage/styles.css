@@ -1,0 +1,85 @@
+
+/* Resources
+
+- Fading between images: http://css3.bradshawenterprises.com/cfimg/
+  React Trasition Group
+- https://blog.bitsrc.io/how-to-implement-smooth-transitions-in-react-bd0497b06b8
+*/
+
+#image {
+  background-repeat: no-repeat;
+  background: rgba(155,155,155,.1);
+  background-size: cover;
+  position: relative;
+  transition: opacity 3s ease-in-out;
+}
+
+.park-info-container {
+display:flex;
+flex-direction: column;
+width: 60%;
+margin: 0 5px;
+position: relative;
+}
+
+
+#title {
+  width: 100%;
+  background: white;
+  position: absolute;
+  bottom: 0;
+  line-height: 30px;
+  /* font-style: italic; */
+  text-align: center;
+  font-size: 30px;
+  padding: 5px;
+  letter-spacing: 4px;
+  transition: all 1000s;
+
+}
+
+/* #image.show-enter {
+  opacity: 0;
+}
+
+#image.show-enter-active{
+  opacity: 1;
+  transition: opacity 3000s;
+}
+
+#image.show-exit {
+  opacity: 0;
+}
+
+#image.show-exit-active {
+  opacity: 1;
+  transition: opacity 3000s;
+} */
+
+.park-image {
+  height:90%;
+  background-size: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+
+/* .hide-enter {
+  opacity: 0;
+}
+
+.hide-enter-active{
+  opacity: 1;
+  transition: all 1s;
+}
+
+.hide-exit {
+  opacity: 0;
+}
+
+.hide-exit-active {
+  opacity: 0 ;
+  transition: all 1s;
+} */

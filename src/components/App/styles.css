@@ -1,0 +1,118 @@
+* {
+  box-sizing: border-box;
+}
+
+main {
+  display: flex;
+  flex-wrap: wrap;
+  margin: auto;
+  width: 1300px;
+}
+
+h3 {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
+}
+span,
+div {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 300;
+}
+
+#left {
+  display: flex;
+  flex-direction: column;
+  font-size: 15px;
+  line-height: 38px;
+  justify-content: space-between;
+  width: 320px;
+  max-height: 470px;
+
+}
+
+#right {
+  flex: 1;
+  height: 482px;
+}
+
+
+/* .best {
+  color:#008000;
+}
+
+.mediocre {
+  color: #FF9933;
+}
+
+.worst {
+  color: #003399;
+} */
+
+#left-top {
+  padding: 0 15px;
+  /* height: 100%; */
+  max-height: 470px;  
+  display: flex;
+  flex-direction: column;
+}
+
+#left-top,
+#left-bottom {
+  border: 1px solid #cecece;
+  padding-top: 5px;
+}
+
+#left-bottom li {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+#top {
+  display: flex;
+  height: 100%;
+
+  /* height: 400px; */
+}
+
+#left-top .park-rating_filters {
+  display: flex;
+  margin-bottom: 5px;
+}
+
+#left-top .park-rating_filters h3 {
+  flex: 1;
+}
+
+#desc {
+  flex: 0 0 70%;
+  margin-left: 10px;
+  margin-bottom: 5px;
+}
+
+#desc .gray {
+  color: gray;
+}
+
+
+#filters {
+  display: flex;
+  position: relative;
+}
+
+#desc p {
+  color: rgb(62, 133, 181);
+  margin: 0;
+  font-size: 20px;
+}
+
+#chart {
+  width: 100%;
+  height: 400px;
+  overflow: scroll;
+}
+
+
+.gScale {
+  /* position: fixed; */
+}

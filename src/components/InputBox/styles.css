@@ -1,0 +1,29 @@
+#parkChoices {
+  /* display: none; */
+  border: 2px solid #cecece;
+  /* position: absolute; */
+  max-height: 350px;
+  padding: 10px 20px;
+  /* width: 300px; */
+  top: 40px;
+  background: white;
+  overflow: scroll;
+  z-index: 100;
+}
+
+.parkChoice {
+  font-size: 15px;
+  padding: 5px 0;
+  cursor: pointer;
+}
+
+#court {
+  flex: 1;
+  margin-right:5px;
+}
+
+#court input {
+ font-size: 14px;
+ width: 100%;
+ color: rgba(117, 117, 117);
+}

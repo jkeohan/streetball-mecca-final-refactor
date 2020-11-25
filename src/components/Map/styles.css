@@ -1,0 +1,30 @@
+/* MAP */
+#map {
+  fill: #e8e7e7;
+  stroke: gray;
+  stroke: black;
+  width: 40%;
+  stroke-width: .3;
+  position: relative;
+/*   stroke-dasharray: 1; */
+}
+
+#map svg {
+  background:#e1e8ea;
+  height: calc(100% - 45px);
+}
+
+#reset {
+  position: absolute;
+  top: 10px;
+  left: 5px;
+  border-radius: 10px;
+  border: 1px solid;
+  font-weight: 400;
+  font-size: 1.17em;
+  color: #418dbb;
+  outline: none;
+  cursor: pointer;
+}
+
+
