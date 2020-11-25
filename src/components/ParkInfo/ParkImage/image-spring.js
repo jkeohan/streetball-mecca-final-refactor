@@ -14,13 +14,13 @@ const ParkImage = ({ activePark }) => {
     const prevImage = images[index]
     if(index){
       setIndex(0)
-      setImages([
+      setImages(() => [
         images[0] = ({ style }) => <animated.div className='park-image' style={{ ...style, backgroundImage: `url(${activePark.url})` }}></animated.div>,
         images[1] = prevImage
       ])
     } else {
       setIndex(1)
-      setImages([
+      setImages(() => [
         images[0] = prevImage,
         images[1] = ({ style }) => <animated.div className='park-image' style={{ ...style, backgroundImage: `url(${activePark.url})` }}></animated.div>
       ])
