@@ -16,19 +16,18 @@ const Input = ({dispatch,allParks,activeParks, reset}) => {
     setOpen(false)
   }
 
-  const parkChoices = allParks.map( (park, index) => {
-    // console.log('Input - parkChoices() - park',park )
-      return ( 
+  const parkChoices = allParks
+      .sort( (a,b) => a.name > b.name ? 1 : -1)
+      .map( (park, index) => ( 
         <div 
-        key={index}
-        className={`parkChoice ${park.code}`}
-        style={{color: park.boroughColor}}
-        onClick={() => handleUpdateVal(park)}
-        >{park.name}
-
-        </div> 
-        )
-    }
+          key={index}
+          className={`parkChoice ${park.code}`}
+          style={{color: park.boroughColor}}
+          onClick={() => handleUpdateVal(park)}
+          >
+          {park.name}
+         </div> 
+      )
   )
 
   // THIS HANDLES THE MANUAL TOGGLING OF THE DROP DOWN
