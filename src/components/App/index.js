@@ -5,14 +5,13 @@ import TopParks from '../ParkInfo/TopParks';
 import ParkImage from '../ParkInfo/ParkImage/image-spring';
 import Title from '../Title';
 import Map from '../Map';
-import BarChart from '../BarChart'
+import BarChart from '../BarChart/index_react'
 // HELPERS
 import { formatData } from '../../services/format/formatters'
 // CUSTOM HOOKS
 import useDataApi from '../../hooks/useDataApi';
 // REDUCERS
 import parkReducer from '../../reducers/parkReducer';
-
 
 const initialState = {
   allNestedData: [],
