@@ -24,9 +24,9 @@ const Map = (props) => {
 
     projRef.current = d3
       .geoMercator()
-      .center([-73.93, 40.68])
+      .center([-73.93, 40.72])
       .scale(60000)
-      .translate([width / 2, height / 2 + 20 + 13]);
+      .translate([width / 2, height / 2]);
 
     pathRef.current = d3.geoPath().projection(projRef.current);
   }, [data]);
