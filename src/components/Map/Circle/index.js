@@ -11,7 +11,7 @@ const Circle = (props) => {
 
   const style = useSpring({
     config: {
-      duration: 1000,
+      duration: 500,
     },
     // r: props.isShowing ? 6 : 0,
     opacity: props.isShowing ? 1 : 0,
