@@ -5,6 +5,8 @@
   "keywords": [],
   "main": "src/index.js",
   "dependencies": {
+    "autoprefixer": "^9.8.0",
+    "colorette": "^1.2.0",
     "d3": "6.2.0",
     "d3-collection": "1.0.7",
     "react": "16.13.1",
