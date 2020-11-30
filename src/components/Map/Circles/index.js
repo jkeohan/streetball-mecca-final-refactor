@@ -10,7 +10,9 @@ const Circles= (props) => {
 
        return (
           <Circle  
+           {...props}
            {...d}
+            park={d}
             key={i}
             proj={proj}
             isShowing={props.activeParks.includes(d)}

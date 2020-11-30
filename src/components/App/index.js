@@ -6,6 +6,7 @@ import ParkImage from '../ParkInfo/ParkImage/image-spring';
 import Title from '../Title';
 import Map from '../Map';
 import BarChart from '../BarChart/index_react'
+// import BarChart from '../BarChart/index_d3'
 // HELPERS
 import { formatData } from '../../services/format/formatters'
 // CUSTOM HOOKS

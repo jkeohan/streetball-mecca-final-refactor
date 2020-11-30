@@ -1,7 +1,6 @@
 #bottom {
   display: flex;
   flex-wrap: wrap;
-  /* position: relative; */
   width: 100%;
   margin-top: 10px;
 }
@@ -18,6 +17,9 @@
   cursor: pointer;
 }
 
+/***************************/
+/* X-AXIS */
+/***************************/
 
 #axis {
   width: 100%;
@@ -36,7 +38,9 @@ svg.neighborhood:hover {
   stroke: none;
 }
 
+/***************************/
 /* TOOLTIP */
+/***************************/
 .rectToolTip, .circleToolTip {
   display:none;
   position:absolute;

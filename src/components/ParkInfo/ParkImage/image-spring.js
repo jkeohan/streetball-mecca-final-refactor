@@ -1,3 +1,7 @@
+/* RESOURCES
+- https://alligator.io/react/advanced-react-spring/
+- 
+*/
 import React, { useState, useEffect } from 'react';
 import { useTransition, animated } from 'react-spring'
 
@@ -6,8 +10,10 @@ import './styles.css';
 const ParkImage = ({ activePark }) => {
   const [index, setIndex] = useState(0)
   const [images,setImages] = useState([
-    ({ style }) => <animated.div className='park-image' style={{ ...style, backgroundImage: `url(https://i.imgur.com/7WxnJ1b.jpg)` }}></animated.div>,
-    ({ style }) => <animated.div className='park-image' style={{ ...style, backgroundImage: `url(https://i.imgur.com/bxlzGXr.jpg)` }}></animated.div>
+    ({ style }) => <animated.div 
+      className='park-image' style={{ ...style, backgroundImage: `url(https://i.imgur.com/7WxnJ1b.jpg)` }}></animated.div>,
+    ({ style }) => <animated.div 
+      className='park-image' style={{ ...style, backgroundImage: `url(https://i.imgur.com/bxlzGXr.jpg)` }}></animated.div>
   ])
 
   useEffect(() => {
@@ -35,12 +41,14 @@ const ParkImage = ({ activePark }) => {
     },
   })
 
+  console.log('ParkImage - transitions', transitions)
+  
   return (
       <>
       <section className='park-info-container'>
       {transitions.map(({ item, props, key }) => {
-        const Page = images[item]
-        return <Page key={key} style={props} />
+        const Image = images[item]
+        return <Image key={key} style={props} />
       })}
         <div id="title">{activePark.name}</div>
       </section>

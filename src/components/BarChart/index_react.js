@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import './styles.css';
 import * as d3 from 'd3';
+import { filterParksByBorough } from '../../helpers';
 let margin = { top: 20, left: 25 };
 
 const BarChart = (props) => {
@@ -38,7 +39,7 @@ const BarChart = (props) => {
   }
 
   const circleToolTip = (e, d) => {
-    console.log('this is circleToolTip e,d: ', e, d);
+    // console.log('this is circleToolTip e,d: ', e, d);
     let top = e.pageY - 80;
     let left = e.pageX + 10;
     //  let top = e.layerY;
@@ -67,7 +68,7 @@ const BarChart = (props) => {
   }
 
   function rectToolTip(e, d) {
-    console.log('this is rectToolTip e,d', e, d);
+    // console.log('this is rectToolTip e,d', e, d);
     let top = e.pageY - 80;
     let left = e.layerX + 200;
     // let top = event.offsetY;
@@ -88,12 +89,19 @@ const BarChart = (props) => {
     tooltip.style('opacity', 0).style('display', 'none');
   }
 
+  function filterPark(e,d) {
+    e.stopPropagation();
+    props.dispatch({type: 'FILTER_ACTIVE_PARK', payload: { park:d }})
+  }
+
   const renderChart = (data) => {
     console.log('BarChart - renderChart - data', data);
     let gBottom = d3.select(svgRef.current);
     // let gBottom = d3.select(gRef.current)
-    yScale.domain(data.map((d, i) => i));
-    yScale.range([0, data.length]);
+    // yScale.domain(data.map((d, i) => i))
+    //   .rangeRound([0, height])
+    //   .paddingInner(0.05);
+    yScale.domain(data.map((d, i) => i)).range([0, data.length]);
 
     // yScale.range([0, data.length * 38.75 ])
 
@@ -152,17 +160,13 @@ const BarChart = (props) => {
       .enter()
       .append('circle')
       .attr('cx', (d) => xScale(+d.overall) + 200)
-      .attr('cy', (d, i) => {
-        let mid = yScale.bandwidth() / 2 + 15;
-        // let mid = (yScale.bandwidth() / 2) - 2.5;
-        return mid;
-      })
+      .attr('cy', (d, i) => yScale.bandwidth() / 2 + 15 )
       .attr('r', 7)
       .attr('fill', (d) => d.color)
       // .attr('fill', d =>  legend(d['Overall court grouping']))
       .attr('stroke', 'black')
       .attr('class', (d, i) => `rect-circle parks park${d.id}`)
-      // .on("click", filterPark)
+      .on("click",  (e,d) => filterPark(e,d))
       .on('mouseover', (e, d) => circleToolTip(e, d))
       .on('mouseout', (e, d) => removeCircleToolTip(d));
 

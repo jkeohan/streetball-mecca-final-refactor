@@ -24,6 +24,11 @@ const Circle = (props) => {
         transform={`translate(${props.proj})`}
         fill={props.color}
         code={props.code} 
+        onClick={(e,d) => { 
+          console.log('Circle - d', props)
+          props.dispatch({type: 'FILTER_ACTIVE_PARK', payload: { park:props.park}})
+          } 
+        }
       />
     </>
   );
