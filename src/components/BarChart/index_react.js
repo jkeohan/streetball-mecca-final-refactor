@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import './styles.css';
 import * as d3 from 'd3';
-import { filterParksByBorough } from '../../helpers';
 let margin = { top: 20, left: 25 };
 
 const BarChart = (props) => {
@@ -19,31 +18,21 @@ const BarChart = (props) => {
     g
       .attr('transform', 'translate(200,0)')
       .call(d3.axisBottom(xScale))
-      .call((g) => {
-        g.select('.domain').remove();
-      }),[xScale]);
+      .call((g) => {g.select('.domain').remove()}),[xScale]);
 
   useEffect(() => {
     d3.select(xAxisRef.current).style('font-size', 14).call(xAxis);
   }, [xAxis]);
 
   useEffect(() => {
-    // if(props.nestedData.length) {
     renderChart(props.nestedData);
     setHeight(props.nestedData.length * 28.75);
-    // }
   }, [props.nestedData]);
 
-  if (!props.activeNeighborhood) {
-    d3.selectAll('svg.neighborhood').style('background', 'none');
-  }
-
   const circleToolTip = (e, d) => {
-    // console.log('this is circleToolTip e,d: ', e, d);
+    console.log('this is circleToolTip e,d: ', e, d);
     let top = e.pageY - 80;
     let left = e.pageX + 10;
-    //  let top = e.layerY;
-    //  let left = e.layerX + 10;
     let tooltip = d3.select('.circleToolTip');
     console.log('circleToolTip - tooltip', tooltip);
     d3.select('.circleToolTip .title').text(d.name);
@@ -68,11 +57,9 @@ const BarChart = (props) => {
   }
 
   function rectToolTip(e, d) {
-    // console.log('this is rectToolTip e,d', e, d);
+    console.log('this is rectToolTip e,d', e, d);
     let top = e.pageY - 80;
     let left = e.layerX + 200;
-    // let top = event.offsetY;
-    // let left = event.offsetX;
     let tooltip = d3.select('.rectToolTip');
     d3.select('.title').text(d.key);
     d3.select('.avg')
@@ -89,30 +76,15 @@ const BarChart = (props) => {
     tooltip.style('opacity', 0).style('display', 'none');
   }
 
-  function filterPark(e,d) {
-    e.stopPropagation();
-    props.dispatch({type: 'FILTER_ACTIVE_PARK', payload: { park:d }})
-  }
-
   const renderChart = (data) => {
     console.log('BarChart - renderChart - data', data);
     let gBottom = d3.select(svgRef.current);
-    // let gBottom = d3.select(gRef.current)
-    // yScale.domain(data.map((d, i) => i))
-    //   .rangeRound([0, height])
-    //   .paddingInner(0.05);
-    yScale.domain(data.map((d, i) => i)).range([0, data.length]);
-
-    // yScale.range([0, data.length * 38.75 ])
-
-    data.sort((a, b) => {
-      return d3.descending(+a.value.avg, +b.value.avg);
-    });
+    yScale.domain(data.map((d, i) => i));
+    yScale.range([0, data.length]);
 
     let neighborhoods = gBottom
       .selectAll('svg.neighborhood')
       .data(data, (d) => d.key);
-    // let neighborhoods = gBottom.selectAll('g.neighborhood').data(data, d => d.key)
 
     const neighborhood = neighborhoods
       .enter()
@@ -160,13 +132,14 @@ const BarChart = (props) => {
       .enter()
       .append('circle')
       .attr('cx', (d) => xScale(+d.overall) + 200)
-      .attr('cy', (d, i) => yScale.bandwidth() / 2 + 15 )
+      .attr('cy', (d, i) => {
+        let mid = yScale.bandwidth() / 2 + 15;
+        return mid;
+      })
       .attr('r', 7)
       .attr('fill', (d) => d.color)
-      // .attr('fill', d =>  legend(d['Overall court grouping']))
       .attr('stroke', 'black')
       .attr('class', (d, i) => `rect-circle parks park${d.id}`)
-      .on("click",  (e,d) => filterPark(e,d))
       .on('mouseover', (e, d) => circleToolTip(e, d))
       .on('mouseout', (e, d) => removeCircleToolTip(d));
 
@@ -179,6 +152,7 @@ const BarChart = (props) => {
         .duration(1000)
         .attr('transform', (d, i) => `translate(0,${yScale(i)})`);
     }
+
     // EXIT
     neighborhoods.exit().remove();
 
@@ -206,9 +180,7 @@ const BarChart = (props) => {
         </svg>
       </div>
       <div id="chart">
-        <div style={svgStyles} ref={svgRef}>
-          {/* <g style={gStyles} ref={gRef} className='bottom'></g> */}
-        </div>
+        <div style={svgStyles} ref={svgRef}></div>
       </div>
     </>
   );

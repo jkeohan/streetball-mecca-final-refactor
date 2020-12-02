@@ -1,6 +1,6 @@
-import {circleLegend} from '../legend'
-import * as d3 from 'd3'
-import {nest} from 'd3-collection';
+import { circleLegend } from '../legend';
+import * as d3 from 'd3';
+import { nest } from 'd3-collection';
 
 const formatData = (data) => {
   // MIGHT NEED TO CREATE AN ARRAY WITH SINGLE INSTANCE BOROUGH NAMES
@@ -10,17 +10,17 @@ const formatData = (data) => {
   //   }
   //   return acc
   // },[])
-  
+
   const boroughColors = {
-    'Brooklyn': "#306A9C",
-    'Manhattan': "#6DB099",
-    Bronx: "#F78154",
-    Queens: "#EAC435",
-    "Staten Island": "#CD7998"
+    Brooklyn: '#306A9C',
+    Manhattan: '#6DB099',
+    Bronx: '#F78154',
+    Queens: '#EAC435',
+    'Staten Island': '#CD7998'
   };
 
-  console.log('formatData - data[0]', data[0])
-  return data.map((d,i) => {
+  console.log('formatData - data[0]', data[0]);
+  return data.map((d, i) => {
     return {
       code: d.gsx$ntacode.$t,
       name: d.gsx$name.$t,
@@ -40,23 +40,16 @@ const formatData = (data) => {
 };
 
 const formatNestedData = (data) => {
-  // console.log('(f):nestingData - data', data)
-  let nested = nest()
-    .key( d => d.neighborhood)
-   .rollup( l => ({
-     'parks': l, 
-     'total': d3.sum(l, d =>  d.overall),  
-     'avg': d3.mean(l, d =>  d.overall),
-     'borough': l[0].borough,
-     'neighborhood' : l[0].neighborhood,
-     'NTA': l[0]['NTA Code']
-   })).entries(data).map(d => {
-    //  console.log('entries - d', d)
-     return d
-   })
-  console.log('this is nested', nested)
-  return nested
-}
+  return nest()
+    .key((d) => d.neighborhood)
+    .rollup((l) => ({
+      parks: l,
+      avg: d3.mean(l, (d) => d.overall),
+      borough: l[0].borough,
+      code: l[0]['code']
+    }))
+    .entries(data)
+};
 
 // ORIGINAL FORMATNESTEDDATA FUNCTION
 // const formatNestedData = (data) => {
@@ -64,8 +57,8 @@ const formatNestedData = (data) => {
 //   let nested = nest()
 //     .key( d => d.neighborhood)
 //    .rollup( l => ({
-//      'parks': l, 
-//      'total': d3.sum(l, d =>  d.overall),  
+//      'parks': l,
+//      'total': d3.sum(l, d =>  d.overall),
 //      'avg': d3.mean(l, d =>  d.overall),
 //      'borough': l[0].borough,
 //      'neighborhood' : l[0].neighborhood,
@@ -75,4 +68,4 @@ const formatNestedData = (data) => {
 //   return nested
 // }
 
-export { formatData, formatNestedData }
+export { formatData, formatNestedData };

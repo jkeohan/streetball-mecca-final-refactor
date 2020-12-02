@@ -41,7 +41,7 @@ const ParkImage = ({ activePark }) => {
     },
   })
 
-  console.log('ParkImage - transitions', transitions)
+  // console.log('ParkImage - transitions', transitions)
   
   return (
       <>

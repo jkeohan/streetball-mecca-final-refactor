@@ -1,48 +1,53 @@
-import { formatNestedData  } from '../services/format/formatters';
-import { 
-  filterTopParks, 
-  filterParksByRating, 
+import { formatNestedData } from '../services/format/formatters';
+import {
+  sortTopParks,
+  filterParksByRating,
   filterParksByName,
   filterParksByBorough,
   filterParksByNeighborhood,
-  resetParkFilter  
+  filterNeighborHoodsByRating 
 } from '../helpers';
 
-
-
 const parkReducer = (state, action) => {
- let topParks, activeParks, park, borough, allNestedData, nestedData, neighborhood
- switch(action.type) {
-   case 'INITIAL_API_CALL' :
-    // const data = formatData(action.payload.data)
-    topParks = action.payload.data.filter((d) => filterParksByRating(d, 'Very Good'))
-    allNestedData = formatNestedData(action.payload.data)
-    return {
-      ...state,
-      allNestedData,
-      nestedData: allNestedData,
-      allParks: action.payload.data,
-      topParks: filterTopParks(topParks),
-      activeParks: action.payload.data,
-      activePark: topParks[0]
-    };
-   case 'FILTER_PARK_RATING' :
-     activeParks = state.allParks.filter((d) => filterParksByRating(d, action.payload.rating))
-     nestedData = []
-     if(state.activeBorough !== 'all') {
-      activeParks = activeParks.filter( park => filterParksByBorough(park, state.activeBorough))
-     }
-      topParks = filterTopParks(activeParks).map(resetParkFilter);
+  let topParks,
+    activeParks,
+    park,
+    borough,
+    allNestedData,
+    nestedData,
+    neighborhood
 
-      for(let i = 0; i < state.allNestedData.length; i += 1){
-        // console.log('FILTER_PARK_RATING', state.allNestedData[i].value.parks)
-        for(let j = 0; j < state.allNestedData[i].value.parks.length; j += 1){
-          console.log('FILTER_PARK_RATING', state.allNestedData[i].value.parks[j].rating )
-          if(state.allNestedData[i].value.parks[j].rating === action.payload.rating){
-            nestedData.push(state.allNestedData[i]) 
-            break
-          }
-        }
+  switch (action.type) {
+    case 'INITIAL_API_CALL':
+      // const data = formatData(action.payload.data)
+      topParks = action.payload.data.filter((d) =>
+        filterParksByRating(d, 'Very Good')
+      );
+      allNestedData = formatNestedData(action.payload.data);
+      console.log('INITIAL_API_CALL - topParks', topParks)
+      return {
+        ...state,
+        allNestedData,
+        nestedData: allNestedData,
+        allParks: action.payload.data,
+        topParks: sortTopParks(topParks),
+        activeParks: action.payload.data,
+        activePark: topParks[0]
+      };
+    case 'FILTER_PARK_RATING':
+      console.log('FILTER_PARK_RATING  - state', state)
+      activeParks = state.allParks.filter((d) => filterParksByRating(d, action.payload.rating));
+      nestedData = [];
+      if (state.activeBorough !== 'all') {
+        activeParks = activeParks.filter((park) => filterParksByBorough(park, state.activeBorough));
+        // nestedData = state.allNestedData.filter((d) => d.value.borough === state.activeBorough);
+        topParks = sortTopParks(activeParks)//.map(resetParkFilter);
+        // THIS FILTERS NEIGHBORHOODS THAT CONTAIN AT LEAST ONE PARK WITH THAT RATING
+        nestedData = filterNeighborHoodsByRating(state.allNestedData, action.payload.rating, state.activeBorough) 
+
+      } else {
+        nestedData = filterNeighborHoodsByRating(state.allNestedData, action.payload.rating, state.activeBorough) 
+        topParks = sortTopParks(activeParks)//.map(resetParkFilter);
       }
 
       return {
@@ -51,17 +56,15 @@ const parkReducer = (state, action) => {
         topParks,
         activeParks,
         activeRating: action.payload.rating,
-        activeNeighborhood: '',
+        activeNeighborhood: ''
       };
-   case 'FILTER_ACTIVE_PARK' :
-      park =  action.payload.park
-      topParks = state.topParks.map( d => filterParksByName(d,park.name))
+    case 'FILTER_ACTIVE_PARK':
+      park = action.payload.park;
+      topParks = state.topParks.map((d) => filterParksByName(d, park.name));
       activeParks = state.allParks.filter((d) => d.name === park.name);
-      console.log('FILTER_ACTIVE_PARK - park', park)
-      nestedData = state.allNestedData
-        // .filter( d => d.value.borough === park.borough)
-        .filter( d => d.value.parks.includes(park))
-      park.active = true;
+      console.log('FILTER_ACTIVE_PARK - park', park);
+      nestedData = state.allNestedData.filter((d) => d.value.parks.includes(park))
+
       return {
         ...state,
         nestedData,
@@ -69,55 +72,58 @@ const parkReducer = (state, action) => {
         activeParks,
         activePark: park,
         activeBorough: park.borough,
-        activeNeighborhood: '',
+        activeNeighborhood: ''
       };
-   case 'FILTER_ACTIVE_BOROUGH' : 
-     borough = action.payload.borough
-     if(borough !== 'all') {
-      activeParks = state.allParks
-      .filter( park => filterParksByBorough(park,borough))
-      .filter((d) => filterParksByRating(d, state.activeRating))
-      topParks = filterTopParks(activeParks).map(resetParkFilter)
-      nestedData = state.allNestedData.filter( d => d.value.borough === borough)
-      console.log('FILTER_ACTIVE_BOROUGH - nestedData', nestedData)
-    } else {
-      activeParks = state.allParks.filter((d) => filterParksByRating(d, state.activeRating))
-      topParks = filterTopParks(activeParks).map(resetParkFilter)
-      nestedData = state.allNestedData
-    }
-    return {
-      ...state,
-      nestedData,
-      topParks,
-      activeParks,
-      activeBorough: borough,
-      activeNeighborhood: '',
-    };
-   case 'FILTER_ACTIVE_NEIGHBORHOOD' :
-      neighborhood = filterParksByNeighborhood(state.nestedData, action.payload.neighborhood.key)
-      
+    case 'FILTER_ACTIVE_BOROUGH':
+      borough = action.payload.borough;
+      nestedData = filterNeighborHoodsByRating(state.allNestedData, state.activeRating, borough) 
+      if (borough !== 'all') {
+        activeParks = state.allParks
+          .filter((park) => filterParksByBorough(park, borough))
+          .filter((d) => filterParksByRating(d, state.activeRating));
+        topParks = sortTopParks(activeParks)//.map(resetParkFilter);
+      } else {
+        activeParks = state.allParks.filter((d) => filterParksByRating(d, state.activeRating));
+        topParks = sortTopParks(activeParks)//.map(resetParkFilter);
+      }
+
+      return {
+        ...state,
+        nestedData,
+        topParks,
+        activeParks,
+        activeBorough: borough,
+        activeNeighborhood: ''
+      };
+    case 'FILTER_ACTIVE_NEIGHBORHOOD':
+      neighborhood = filterParksByNeighborhood(
+        state.nestedData,
+        action.payload.neighborhood.key
+      );
+
       return {
         ...state,
         activeParks: neighborhood[0].value.parks,
         activeBorough: action.payload.neighborhood.value.borough,
         activeNeighborhood: action.payload.neighborhood.key
-  };
-   case 'RESET' :
-    // allParks = state.allParks.map(resetParkFilter)
-    topParks = filterTopParks(state.allParks).map(resetParkFilter);
-    return {
-      ...state,
-      nestedData: state.allNestedData,
-      topParks,
-      activeParks: state.allParks,
-      activePark: topParks[0],
-      activeRating: 'Very Good',
-      activeBorough: 'all',
-      activeNeighborhood: '',
-      reset: false
-    };
-   default : return state
- }
-}
+      };
+    case 'RESET':
+      topParks = sortTopParks(state.allParks)
 
-export default parkReducer
+      return {
+        ...state,
+        nestedData: state.allNestedData,
+        topParks,
+        activeParks: state.allParks,
+        activePark: topParks[0],
+        activeRating: 'Very Good',
+        activeBorough: 'all',
+        activeNeighborhood: '',
+        reset: false
+      };
+    default:
+      return state;
+  }
+};
+
+export default parkReducer;

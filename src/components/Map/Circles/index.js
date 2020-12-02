@@ -2,7 +2,7 @@ import React from 'react';
 import Circle from  '../Circle'
 
 const Circles= (props) => {
-  console.log('Circles - props', props)
+  // console.log('Circles - props', props)
   return (
     <>
       {props.allParks.map( (d,i) => {
