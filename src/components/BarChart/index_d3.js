@@ -81,9 +81,6 @@ const BarChart = (props) => {
     let gBottom = d3.select(svgRef.current);
     yScale.domain(data.map((d, i) => i));
     yScale.range([0, data.length]);
-    data.sort((a, b) => {
-					return d3.descending(+a.value.avg, +b.value.avg);
-				});
 
     let neighborhoods = gBottom
       .selectAll('svg.neighborhood')
