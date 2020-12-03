@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import './styles.css';
 import * as d3 from 'd3';
+import XAxis from './XAxis'
+
 let margin = { top: 20, left: 25 };
 
 const BarChart = (props) => {
@@ -81,6 +83,7 @@ const BarChart = (props) => {
     let gBottom = d3.select(svgRef.current);
     yScale.domain(data.map((d, i) => i));
     yScale.range([0, data.length]);
+    data.sort( (a,b) => { return d3.descending(+a.value.avg, +b.value.avg)})
 
     let neighborhoods = gBottom
       .selectAll('svg.neighborhood')
@@ -175,6 +178,7 @@ const BarChart = (props) => {
   return (
     <>
       <div id="axis">
+        <XAxis />
         <svg style={{ height: '20px', width: '100%' }}>
           <g ref={xAxisRef} style={{ fontSize: '14px' }}></g>
         </svg>

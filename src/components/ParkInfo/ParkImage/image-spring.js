@@ -2,59 +2,43 @@
 - https://alligator.io/react/advanced-react-spring/
 - 
 */
-import React, { useState, useEffect } from 'react';
-import { useTransition, animated } from 'react-spring'
+import React from 'react';
+import { useTransition, animated } from 'react-spring';
 
 import './styles.css';
 
 const ParkImage = ({ activePark }) => {
-  const [index, setIndex] = useState(0)
-  const [images,setImages] = useState([
-    ({ style }) => <animated.div 
-      className='park-image' style={{ ...style, backgroundImage: `url(https://i.imgur.com/7WxnJ1b.jpg)` }}></animated.div>,
-    ({ style }) => <animated.div 
-      className='park-image' style={{ ...style, backgroundImage: `url(https://i.imgur.com/bxlzGXr.jpg)` }}></animated.div>
-  ])
 
-  useEffect(() => {
-    if(index){
-      setIndex(0)
-      setImages(() => [
-        images[0] = ({ style }) => <animated.div className='park-image' style={{ ...style, backgroundImage: `url(${activePark.url})` }}></animated.div>,
-        images[1] = images[index]
-      ])
-    } else {
-      setIndex(1)
-      setImages(() => [
-        images[0] = images[index],
-        images[1] = ({ style }) => <animated.div className='park-image' style={{ ...style, backgroundImage: `url(${activePark.url})` }}></animated.div>
-      ])
-    }
-  },[activePark])
-
-  const transitions = useTransition(index, p => p, {
-    from: { opacity: 0},
-    enter: { opacity: 1},
-    leave: { opacity: 0},
+  const transitions = useTransition(activePark, (image) => image.code, {
+    from: { opacity: 0 },
+    enter: { opacity: 1 },
+    leave: { opacity: 0 },
     config: {
-      duration: 500,
-    },
-  })
+      duration: 1000
+    }
+  });
 
-  // console.log('ParkImage - transitions', transitions)
-  
+  console.log('ParkImage - transitions', transitions);
+
+
   return (
-      <>
-      <section className='park-info-container'>
-      {transitions.map(({ item, props, key }) => {
-        const Image = images[item]
-        return <Image key={key} style={props} />
-      })}
+    <>
+      <section className="park-info-container">
+        {activePark.code &&
+          transitions.map(({ item, props, key }) => {
+            console.log('transition.map - item, props, key', item, props, key);
+            return (
+              <animated.div
+                key={key}
+                className="park-image"
+                style={{ ...props, backgroundImage: `url(${item.url})` }}
+              />
+            );
+          })}
         <div id="title">{activePark.name}</div>
       </section>
-      </>
-    );
+    </>
+  );
+};
 
-}
-
-export default ParkImage;
+export default ParkImage
