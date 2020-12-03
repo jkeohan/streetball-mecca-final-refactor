@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import './styles.css';
 import * as d3 from 'd3';
-import XAxis from './XAxis'
 
 let margin = { top: 20, left: 25 };
 
