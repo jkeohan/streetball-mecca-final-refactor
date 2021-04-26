@@ -20,7 +20,6 @@ const ParkImage = ({ activePark }) => {
 
   console.log('ParkImage - transitions', transitions);
 
-
   return (
     <>
       <section className="park-info-container">
