@@ -11,22 +11,14 @@ const BarChart = (props) => {
 
   let yScale = d3.scaleBand().padding(0.1);
 
-  let xScale = d3
-    .scaleLinear()
-    .domain([0, 100])
-    .range([0, 1100 - margin.left]);
+  let xScale = d3.scaleLinear().domain([0, 100]).range([0, 1100 - margin.left])
 
   // useCallback used as per Reacts advices after adding xAxis as dependency to useEffect
-  let xAxis = useCallback(
-    (g) =>
-      g
-        .attr('transform', 'translate(200,0)')
-        .call(d3.axisBottom(xScale))
-        .call((g) => {
-          g.select('.domain').remove();
-        }),
-    [xScale]
-  );
+  let xAxis = useCallback( (g) =>
+    g
+      .attr('transform', 'translate(200,0)')
+      .call(d3.axisBottom(xScale))
+      .call((g) => {g.select('.domain').remove()}),[xScale]);
 
   useEffect(() => {
     d3.select(xAxisRef.current).style('font-size', 14).call(xAxis);
@@ -70,9 +62,8 @@ const BarChart = (props) => {
     let left = e.layerX + 200;
     let tooltip = d3.select('.rectToolTip');
     d3.select('.title').text(d.key);
-    d3.select('.avg').text(
-      `Avg. Overall Rating: ${Math.floor(d.value.avg)}/100`
-    );
+    d3.select('.avg')
+      .text(`Avg. Overall Rating: ${Math.floor(d.value.avg)}/100`);
     tooltip
       .style('top', top + 20 + 'px')
       .style('left', left + 'px')
@@ -87,19 +78,17 @@ const BarChart = (props) => {
 
   const renderChart = (data) => {
     console.log('BarChart - renderChart - data', data);
-    let svgNeighborhoods = d3.select(svgRef.current);
-    yScale.domain(data.map((d, i) => i)).range([0, data.length * 30.84]);
-    data.sort((a, b) => {
-      return d3.descending(+a.value.avg, +b.value.avg);
-    });
+    let gBottom = d3.select(svgRef.current);
+    yScale.domain(data.map((d, i) => i));
+    yScale.range([0, data.length]);
 
-    let neighborhoods = svgNeighborhoods
-      .selectAll('g.neighborhood')
+    let neighborhoods = gBottom
+      .selectAll('svg.neighborhood')
       .data(data, (d) => d.key);
 
     const neighborhood = neighborhoods
       .enter()
-      .append('g')
+      .append('svg')
       .attr('height', '28.84px')
       .classed('neighborhood', true)
       .attr('id', (d) => {
@@ -143,7 +132,10 @@ const BarChart = (props) => {
       .enter()
       .append('circle')
       .attr('cx', (d) => xScale(+d.overall) + 200)
-      .attr('cy', (d, i) => yScale.bandwidth() / 2)
+      .attr('cy', (d, i) => {
+        let mid = yScale.bandwidth() / 2 + 15;
+        return mid;
+      })
       .attr('r', 7)
       .attr('fill', (d) => d.color)
       .attr('stroke', 'black')
@@ -176,6 +168,10 @@ const BarChart = (props) => {
     });
   };
 
+  const svgStyles = {
+    height: `${height}px`
+  };
+
   return (
     <>
       <div id="axis">
@@ -184,7 +180,7 @@ const BarChart = (props) => {
         </svg>
       </div>
       <div id="chart">
-        <svg ref={svgRef}></svg>
+        <div style={svgStyles} ref={svgRef}></div>
       </div>
     </>
   );

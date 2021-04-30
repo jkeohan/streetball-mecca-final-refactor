@@ -1,0 +1,20 @@
+.rectToolTip {
+  /* display: none; */
+  position: absolute;
+  background: white;
+  padding: 5px 20px;
+  text-align: left;
+  border: 1px solid;
+  box-shadow: 2px 2px #7b7575;
+  z-index: 1000;
+}
+
+.rectToolTip .title {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-weight: bold;
+}
+
+.rectToolTip .avg {
+  margin: 0;
+}

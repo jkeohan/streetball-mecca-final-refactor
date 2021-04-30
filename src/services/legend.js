@@ -16,4 +16,12 @@ export const boroughLegend = d3
     'rgba(205,125,151,.4)'
   ]);
 
+  export const colorLegendForParkText = d3
+		.scaleOrdinal()
+		.domain('Brooklyn', 'Manhattan')
+		.range([
+			'rgba(109,176,153,1)',
+			'rgba(48,106,156,1)',
+		]);
+
 //https://coolors.co/e9d985-177e89-598381-846a6a-db5461

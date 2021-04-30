@@ -15,23 +15,22 @@ import useDataApi from '../../hooks/useDataApi';
 import parkReducer from '../../reducers/parkReducer';
 
 const initialState = {
-  allNestedData: [],
-  nestedData: [],
-  allParks: [],
-  activeParks: [],
-  topParks: [],
-  activePark: {},
-  activeRating: 'Very Good',
-  activeBorough: 'all',
-  reset: false
+	activePark: {},
+	activeParks: [],
+	activeRating: '',
+	activeBorough: 'all',
+	allParks: [],
+	allNestedData: [],
+	nestedData: [],
+	parksBasedOnActiveFilterRating: [],
+	reset: false,
 };
 
 export default function App() {
   const [parkData, dispatch] = useReducer(parkReducer, initialState);
 
   const [{ data, isLoading }] = useDataApi(
-    'https://spreadsheets.google.com/feeds/list/1EJ5k2hkdldEz7yrvWSvkCs3Hm6aCU4Po4zBH6nVYvhU/od6/public/values?alt=json',
-    []
+    'https://spreadsheets.google.com/feeds/list/1EJ5k2hkdldEz7yrvWSvkCs3Hm6aCU4Po4zBH6nVYvhU/od6/public/values?alt=json'
   );
 
   useEffect(() => {
@@ -43,7 +42,6 @@ export default function App() {
     }
   }, [data]);
 
-  // console.log('App - before return - parkData', parkData);
   return (
     <div className="App">
       <main>
@@ -69,7 +67,7 @@ export default function App() {
             <p>Bars represent <span className="gray">average neighborhood rating, </span>circles are individual court ratings</p>
           </div>
           <BarChart {...parkData} dispatch={dispatch}/>
-          <article className="rectToolTip">
+          {/* <article className="rectToolTip">
             <p className='title'>Central Park</p>
             <p className='avg'>Avg. Overall Rating: 83/100</p>
           </article>
@@ -77,7 +75,7 @@ export default function App() {
             <p className='title'>Central Park (Great Lake)</p>
             <p className='neighborhood'>Central Park, Manhattan</p>
             <p className='avg'>Overall: 83/100</p>
-          </article>
+          </article> */}
       </section>
       </main>
     </div>

@@ -15,8 +15,11 @@ const ParkFilter = (props) => {
     <h3 
     style={style}
     onClick={() => {
-      console.log('ParkFilter clicked')
-      props.dispatch({type: 'FILTER_PARK_RATING' , payload: {rating: props.name}})
+      // console.log('ParkFilter clicked')
+      props.dispatch({
+				type: 'FILTER_ACTIVE_RATING_OR_BOROUGH',
+				payload: { rating: props.name },
+			});
       // props.handleUpdateParkRating({type: 'FILTER_PARK_RATING' , payload: {rating: props.name}})
       }  
     }

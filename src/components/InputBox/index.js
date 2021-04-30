@@ -3,74 +3,94 @@ import './styles.css';
 import useOnClickOutside from '../../hooks/useOnClickOutside'
 
 const Input = ({dispatch,allParks,activeParks, reset}) => {
-  // console.log('Input - props', activeParks, reset)
-  const [val, setVal] = useState('');
-  const [isVisible, setIsVisible] = useState(false)
-  const ref = useRef()
-  const [isOpen, setOpen] = useState(false)
-  useOnClickOutside(ref, () => setOpen(false))
+	// console.log('Input - props', activeParks, reset)
+	const [val, setVal] = useState('');
+	const [isVisible, setIsVisible] = useState(false);
+	const [isOpen, setOpen] = useState(false);
+	const [filteredParks, setFilteredParks] = useState(activeParks);
+	const ref = useRef();
+	const backupActiveParks = useRef(activeParks);
 
-  const handleUpdateVal = (park) => {
-    dispatch({type: 'FILTER_ACTIVE_PARK', payload: { park }})
-    setVal(park.name)
-    setOpen(false)
-  }
+	useOnClickOutside(ref, () => setOpen(false));
 
-  const parkChoices = allParks
-      .sort( (a,b) => a.name > b.name ? 1 : -1)
-      .map( (park, index) => ( 
-        <div 
-          key={index}
-          className={`parkChoice ${park.code}`}
-          style={{color: park.boroughColor}}
-          onClick={() => handleUpdateVal(park)}
-          >
-          {park.name}
-         </div> 
-      )
-  )
+	const handleUpdateVal = (park) => {
+		dispatch({ type: 'FILTER_ACTIVE_PARK', payload: { park } });
+		setVal(park.name);
+		setOpen(false);
+	};
 
-  // THIS HANDLES THE MANUAL TOGGLING OF THE DROP DOWN
-  const handleToggle = () => {
-    setIsVisible(!isVisible)
-    setOpen(true)
-  }
+	console.log('Input -  ', filteredParks, activeParks);
 
-  useEffect(() => {
-    setIsVisible(false)
-    if(activeParks.length > 2 || reset) {
-        setVal('')
-    } else if(activeParks.length === 1) {
-      setVal(activeParks[0].name)
-    }
-    // setVal('')
-  }, [activeParks, reset])
+	const parkChoices = filteredParks
+		.sort((a, b) => (a.name > b.name ? 1 : -1))
+		.map((park, index) => (
+			<div
+				key={index}
+				className={`parkChoice ${park.code}`}
+				style={{ color: park.boroughColor }}
+				onClick={() => handleUpdateVal(park)}>
+				{park.name}
+			</div>
+		));
 
-  // useEffect(() => {
-  //   setVal()
-  // }, [val])
+	// THIS HANDLES THE MANUAL TOGGLING OF THE DROP DOWN
+	const handleToggle = () => {
+		setIsVisible(!isVisible);
+		setOpen(true);
+	};
 
-  return (
-    <>
-    <form>
-      <label htmlFor="">Find A Court - all courts</label>
-      <input
-        defaultValue={val}
-        onClick={handleToggle}
-        type="text"
-        placeholder="court name"
-      />
-    </form>
-      {isOpen ? (
-      <div ref={ref} id="parkChoices" >
-        {parkChoices}
-        {/* 
-          <div class="parkChoice park0">100% Playground</div>
-          <div class="parkChoice park189">24 Sycamores Playground</div>
-        */}
-      </div> ) : '' }
-    </>
-  );
+	const handleChange = (event) => {
+		const val = event.target.value;
+		const filteredActiveParks = activeParks.filter((activePark) => {
+			return activePark.name.toLowerCase().includes(val);
+		});
+
+		setVal(val);
+		val ? setFilteredParks(filteredActiveParks) : setFilteredParks(activeParks);
+		console.log('Input - handleChange ', filteredActiveParks, val);
+	};
+
+	useEffect(() => {
+		setIsVisible(false);
+		if (activeParks.length > 2 || reset) {
+      setFilteredParks(activeParks)
+			setVal('');
+		} else if (activeParks.length === 1) {
+			setVal(activeParks[0].name);
+		}
+	}, [activeParks, reset]);
+
+	// useEffect(() => {
+	// 	setIsVisible(false);
+	// 	if (filteredParks.length > 2 || reset) {
+	// 		setVal('');
+	// 	} else if (filteredParks.length === 1) {
+	// 		setVal(filteredParks[0].name);
+	// 	}
+	// }, [filteredParks, reset]);
+
+	return (
+		<>
+			<form>
+				<label htmlFor=''>Find A Court - all courts</label>
+				<input
+					onChange={handleChange}
+					name='park-name'
+					value={val}
+					onClick={handleToggle}
+					type='text'
+					placeholder='park name'
+				/>
+			</form>
+			{isOpen ? (
+				<div ref={ref} id='parkChoices'>
+					{parkChoices}
+				</div>
+			) : (
+				''
+			)}
+		</>
+	);
 };
 
 
@@ -86,6 +106,3 @@ export default Input
 
 // const MemoizedInput = React.memo(Input, areEqual);
 // export default MemoizedInput
-
-
-

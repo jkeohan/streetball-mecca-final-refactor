@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 
 // https://www.robinwieruch.de/react-hooks-fetch-data/
 
-const useDataApi = (initialUrl, initialData) => {
-  const [data, setData] = useState(initialData);
+const useDataApi = (initialUrl) => {
   const [url, setUrl] = useState(initialUrl);
+  const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -28,7 +28,8 @@ const useDataApi = (initialUrl, initialData) => {
     makeAPICall();
   }, [url, initialUrl]);
 
-  return [{ data, isLoading }, setUrl];
+  return [{ data, isLoading }];
+  // return [{ data, isLoading }, setUrl];
 };
 
 export default useDataApi;

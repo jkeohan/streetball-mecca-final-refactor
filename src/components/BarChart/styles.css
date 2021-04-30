@@ -21,8 +21,13 @@
 /* X-AXIS */
 /***************************/
 
-#axis {
-  width: 100%;
+
+#bar-chart {
+  width:100%;
+}
+
+#bar-chart svg {
+  height: 1600.25px;
 }
 
 svg {
@@ -31,7 +36,7 @@ svg {
 }
 
 svg.neighborhood:hover {
-  background:beige;
+  background: beige;
 }
 
 .tick line {
@@ -41,49 +46,16 @@ svg.neighborhood:hover {
 /***************************/
 /* TOOLTIP */
 /***************************/
-.rectToolTip, .circleToolTip {
-  display:none;
-  position:absolute;
-  background:white;
-  padding: 5px 20px;
+
+
+#mapCountyToolTip {
+  position: absolute;
   text-align: center;
-  border:1px solid;
-  box-shadow: 2px 2px #7b7575;
-}
-
-.rectToolTip .title {
-  margin-top: 0;
-  margin-bottom: 0;
-  font-weight: bold;
-}
-
-.rectToolTip .avg{
-  margin: 0;
-}
-
-.circleToolTip {
-  width:250px;
-}
-
-.circleToolTip .title {
-  margin-top: 0;
-  margin-bottom: 0;
-  font-weight: bold;
-}
-
-.circleToolTip .neighborhood, .circleToolTip .avg{
-  margin: 0;
-}
-
-#mapCountyToolTip { 
-  position: absolute;     
-  text-align: center;         
-  padding: 2px;       
-  font: 12px sans-serif;    
-  background: #fff; 
-  border: 0px;    
-  border-radius: 8px;     
+  padding: 2px;
+  font: 12px sans-serif;
+  background: #fff;
+  border: 0px;
+  border-radius: 8px;
   pointer-events: none;
-  opacity: 0;     
+  opacity: 0;
 }
-

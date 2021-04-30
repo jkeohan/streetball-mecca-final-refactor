@@ -1,0 +1,36 @@
+.circleToolTip {
+  /* width: 250px; */
+  min-width:270px;
+  /* display: inline-block; */
+  /* position:relative; */
+  position:absolute;
+  background: white;
+  padding: 5px 20px;
+  text-align: left;
+  border: 1px solid;
+  box-shadow: 2px 2px #7b7575;
+  z-index: 1000;
+}
+
+.circleToolTip .circle-title {
+  margin-top: 0px;
+  /* margin-left:20px;
+  margin-right:20px; */
+  margin-bottom: 0;
+  font-weight: bold;
+}
+
+
+.circleToolTip .circle-neighborhood,
+.circleToolTip .avg {
+  margin: 0;
+}
+
+.circleToolTip .circle-neighborhood {
+  margin:5px 0;
+}
+
+
+/* .circleToolTip p {
+  margin-bottom:5px;
+} */

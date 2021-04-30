@@ -7,7 +7,7 @@ const  DropDown = (props) => {
   const handleChange = () => {
     const borough = selectRef.current.value;
     props.dispatch({
-      type: 'FILTER_ACTIVE_BOROUGH',
+      type: 'FILTER_ACTIVE_RATING_OR_BOROUGH',
       payload: { borough }
     });
   };

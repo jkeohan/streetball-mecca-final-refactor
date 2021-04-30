@@ -1,129 +1,186 @@
 import { formatNestedData } from '../services/format/formatters';
+import { colorLegendForParkText } from '../services/legend';
 import {
-  sortTopParks,
-  filterParksByRating,
-  filterParksByName,
-  filterParksByBorough,
-  filterParksByNeighborhood,
-  filterNeighborHoodsByRating 
+	sortTopParks,
+	filterParksByNeighborhood,
 } from '../helpers';
 
 const parkReducer = (state, action) => {
-  let topParks,
-    activeParks,
-    park,
-    borough,
-    allNestedData,
-    nestedData,
-    neighborhood
+	let allParks,
+		parksBasedOnActiveFilterRating,
+		activeParks,
+		park,
+		allNestedData,
+		nestedData,
+		neighborhood;
 
-  switch (action.type) {
-    case 'INITIAL_API_CALL':
-      // const data = formatData(action.payload.data)
-      topParks = action.payload.data.filter((d) =>
-        filterParksByRating(d, 'Very Good')
-      );
-      allNestedData = formatNestedData(action.payload.data);
-      console.log('INITIAL_API_CALL - topParks', topParks)
-      return {
-        ...state,
-        allNestedData,
-        nestedData: allNestedData,
-        allParks: action.payload.data,
-        topParks: sortTopParks(topParks),
-        activeParks: action.payload.data,
-        activePark: topParks[0]
-      };
-    case 'FILTER_PARK_RATING':
-      console.log('FILTER_PARK_RATING  - state', state)
-      activeParks = state.allParks.filter((d) => filterParksByRating(d, action.payload.rating));
-      nestedData = [];
-      if (state.activeBorough !== 'all') {
-        activeParks = activeParks.filter((park) => filterParksByBorough(park, state.activeBorough));
-        // nestedData = state.allNestedData.filter((d) => d.value.borough === state.activeBorough);
-        topParks = sortTopParks(activeParks)//.map(resetParkFilter);
-        // THIS FILTERS NEIGHBORHOODS THAT CONTAIN AT LEAST ONE PARK WITH THAT RATING
-        nestedData = filterNeighborHoodsByRating(state.allNestedData, action.payload.rating, state.activeBorough) 
+	switch (action.type) {
+		case 'INITIAL_API_CALL':
+			return setInitialState();
 
-      } else {
-        nestedData = filterNeighborHoodsByRating(state.allNestedData, action.payload.rating, state.activeBorough) 
-        topParks = sortTopParks(activeParks)//.map(resetParkFilter);
-      }
+		case 'FILTER_ACTIVE_RATING_OR_BOROUGH':
+			return filterDashboardBySelectedRatingOrBorough();
 
-      return {
-        ...state,
-        nestedData,
-        topParks,
-        activeParks,
-        activeRating: action.payload.rating,
-        activeNeighborhood: ''
-      };
-    case 'FILTER_ACTIVE_PARK':
-      park = action.payload.park;
-      topParks = state.topParks.map((d) => filterParksByName(d, park.name));
-      activeParks = state.allParks.filter((d) => d.name === park.name);
-      console.log('FILTER_ACTIVE_PARK - park', park);
-      nestedData = state.allNestedData.filter((d) => d.value.parks.includes(park))
+		case 'FILTER_ACTIVE_PARK':
+			return filterDashboardBySelectedPark();
 
-      return {
-        ...state,
-        nestedData,
-        topParks,
-        activeParks,
-        activePark: park,
-        activeBorough: park.borough,
-        activeNeighborhood: ''
-      };
-    case 'FILTER_ACTIVE_BOROUGH':
-      borough = action.payload.borough;
-      nestedData = filterNeighborHoodsByRating(state.allNestedData, state.activeRating, borough) 
-      if (borough !== 'all') {
-        activeParks = state.allParks
-          .filter((park) => filterParksByBorough(park, borough))
-          .filter((d) => filterParksByRating(d, state.activeRating));
-        topParks = sortTopParks(activeParks)//.map(resetParkFilter);
-      } else {
-        activeParks = state.allParks.filter((d) => filterParksByRating(d, state.activeRating));
-        topParks = sortTopParks(activeParks)//.map(resetParkFilter);
-      }
+		case 'FILTER_ACTIVE_NEIGHBORHOOD':
+			return filterDashboardBySelectedNeighborhood();
 
-      return {
-        ...state,
-        nestedData,
-        topParks,
-        activeParks,
-        activeBorough: borough,
-        activeNeighborhood: ''
-      };
-    case 'FILTER_ACTIVE_NEIGHBORHOOD':
-      neighborhood = filterParksByNeighborhood(
-        state.nestedData,
-        action.payload.neighborhood.key
-      );
+		case 'RESET':
+			return resetDashboard();
 
-      return {
-        ...state,
-        activeParks: neighborhood[0].value.parks,
-        activeBorough: action.payload.neighborhood.value.borough,
-        activeNeighborhood: action.payload.neighborhood.key
-      };
-    case 'RESET':
-      topParks = sortTopParks(state.allParks)
+		default:
+			return state;
+	}
 
-      return {
-        ...state,
-        nestedData: state.allNestedData,
-        topParks,
-        activeParks: state.allParks,
-        activePark: topParks[0],
-        activeRating: 'Very Good',
-        activeBorough: 'all',
-        activeNeighborhood: '',
-        reset: false
-      };
-    default:
-      return state;
-  }
+	function setInitialState() {
+		allParks = setParkTextColorToBoroughColor();
+		parksBasedOnActiveFilterRating = allParks;
+		allNestedData = formatNestedData(action.payload.data);
+
+		return {
+			...state,
+			allNestedData,
+			nestedData: allNestedData,
+			allParks,
+			parksBasedOnActiveFilterRating,
+			activeParks: allParks,
+			activePark: sortTopParks(parksBasedOnActiveFilterRating)[0],
+		};
+	}
+
+	function setParkTextColorToBoroughColor() {
+		return action.payload.data.map((d) => {
+			d.boroughColor = colorLegendForParkText(d.borough);
+			return d;
+		});
+	}
+
+	function filterDashboardBySelectedNeighborhood() {
+		neighborhood = filterParksByNeighborhood(
+			state.nestedData,
+			action.payload.neighborhood.key
+		);
+		activeParks = neighborhood[0].value.parks;
+		console.log(
+			'filterDashboardBySelectedNeighborhood - neighborhood',
+			neighborhood
+		);
+		return {
+			...state,
+			activeParks,
+			parksBasedOnActiveFilterRating: activeParks,
+			activeBorough: action.payload.neighborhood.value.borough,
+			activeNeighborhood: action.payload.neighborhood.key,
+		};
+	}
+
+	function filterDashboardBySelectedPark() {
+		park = action.payload.park;
+		activeParks = state.allParks.filter((d) => d.name === park.name);
+
+		nestedData = state.allNestedData.filter((d) =>
+			d.value.parks.includes(park)
+		);
+
+		parksBasedOnActiveFilterRating = setSelectedParkToActive();
+
+		return {
+			...state,
+			nestedData,
+			parksBasedOnActiveFilterRating,
+			activeParks,
+			activePark: park,
+			activeBorough: park.borough,
+			activeNeighborhood: '',
+		};
+	}
+
+	function filterDashboardBySelectedRatingOrBorough() {
+		const { rating, borough } = setRatingAndBorough();
+		activeParks = filterParksByRatingAndBorough();
+		parksBasedOnActiveFilterRating = activeParks;
+		nestedData = filterNeighborhoodsByRatingOrBorough(activeParks);
+
+		return {
+			...state,
+			nestedData,
+			activeParks,
+			parksBasedOnActiveFilterRating,
+			activeRating: rating,
+			activeBorough: borough,
+			activeNeighborhood: '',
+		};
+	}
+
+	function filterNeighborhoodsByRatingOrBorough(activeParks) {
+		let activeNeighborhoods = Array.from(
+			new Set(activeParks.map((d) => d.neighborhood))
+		);
+
+		return state.allNestedData.filter((d) =>
+			activeNeighborhoods.includes(d.key)
+		);
+	}
+
+	function filterParksByRatingAndBorough() {
+		const { rating, borough } = setRatingAndBorough();
+
+		return state.allParks
+			.filter((d) => filterParksByRating(d, rating))
+			.filter((d) => filterParksByBorough(d, borough));
+	}
+
+	function filterParksByRating(park, filter) {
+		return filter === '' ? park : park.rating === filter;
+	}
+
+	function filterParksByBorough(park, filter) {
+		return filter === 'all' ? park : park.borough === filter;
+	}
+
+	function setRatingAndBorough() {
+		return {
+			rating: action.payload.rating || state.activeRating,
+			borough: action.payload.borough || state.activeBorough,
+		};
+	}
+
+	function setSelectedParkToActive() {
+		return (parksBasedOnActiveFilterRating = state.parksBasedOnActiveFilterRating.map(
+			(d) => {
+				if (d.name === park.name) {
+					console.log('FILTER_ACTIVE_PARK - d', d, d.name, park.name);
+				}
+				if (d.name === park.name) {
+					d.active = true;
+				} else {
+					d.active = false;
+				}
+				return d;
+			}
+		));
+	}
+
+	function resetDashboard() {
+		parksBasedOnActiveFilterRating = state.allParks.map((d) => {
+			d.active = false;
+			return d;
+		});
+
+		return {
+			...state,
+			nestedData: state.allNestedData,
+			parksBasedOnActiveFilterRating,
+			activeParks: state.allParks,
+			activePark: sortTopParks(parksBasedOnActiveFilterRating)[0],
+			activeRating: '',
+			activeBorough: 'all',
+			activeNeighborhood: '',
+			reset: false,
+		};
+	}
 };
 
 export default parkReducer;

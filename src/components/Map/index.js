@@ -8,7 +8,7 @@ import Circles from './Circles';
 import './styles.css';
 
 const Map = (props) => {
-  console.log('Map - props', props)
+  // console.log('Map - props', props)
   const svgRef = useRef();
   const projRef = useRef(d3.geoMercator().center([-73.93, 40.72]).scale(57500));
   const pathRef = useRef();

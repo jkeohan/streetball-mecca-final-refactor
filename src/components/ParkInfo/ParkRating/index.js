@@ -9,7 +9,7 @@ const ParkRating = memo(({
 }) => {
   // console.log('ParkRating', park)
   const backgroundStyle = {
-    background: park.active ? 'rgba(155,155,155,.1)' : 'white'
+    background: park.active ? 'rgba(155,155,155,.4)' : 'white'
   };
 
   const parkColor = {
