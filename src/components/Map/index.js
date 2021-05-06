@@ -47,7 +47,7 @@ const Map = (props) => {
   };
 
   return (
-    <div id="map">
+    <>
       <svg id="boroughs-map" ref={svgRef}>
         {data.length && renderChart()}
         <Circles {...props} projection={projRef.current} />
@@ -57,15 +57,15 @@ const Map = (props) => {
         Reset
       </button>
 
-      <div id="filters">
+      {/* <div id="filters">
         <div id="court">
           <Input {...props} />
         </div>
         <div id="borough">
           <DropDown {...props} />
         </div>
-      </div>
-    </div>
+      </div> */}
+    </>
   );
 };
 

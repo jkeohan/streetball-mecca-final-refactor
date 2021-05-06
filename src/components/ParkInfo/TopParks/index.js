@@ -29,10 +29,10 @@ const TopParks = ({
 		);
 	});
 
-  console.log(
-		'TopParks -parksBasedOnActiveFilterRating ',
-		parksBasedOnActiveFilterRating
-	);
+//   console.log(
+// 		'TopParks -parksBasedOnActiveFilterRating ',
+// 		parksBasedOnActiveFilterRating
+// 	);
   
 	const renderParks =  parksBasedOnActiveFilterRating
 		.sort((a, b) => +b.overall - +a.overall)

@@ -3,7 +3,7 @@ import './styles.css'
 
 
 const ToolTip = ({ coords, neighborhood }) => {
-  console.log('ToolTip - neighborhood', neighborhood, coords);
+  // console.log('ToolTip - neighborhood', neighborhood, coords);
 
   return (
     <article 

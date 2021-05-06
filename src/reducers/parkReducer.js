@@ -1,9 +1,6 @@
 import { formatNestedData } from '../services/format/formatters';
 import { colorLegendForParkText } from '../services/legend';
-import {
-	sortTopParks,
-	filterParksByNeighborhood,
-} from '../helpers';
+import { sortTopParks, filterParksByNeighborhood } from '../helpers';
 
 const parkReducer = (state, action) => {
 	let allParks,
@@ -27,11 +24,34 @@ const parkReducer = (state, action) => {
 		case 'FILTER_ACTIVE_NEIGHBORHOOD':
 			return filterDashboardBySelectedNeighborhood();
 
+		case 'CLEAR_INPUT_FIELD_ACTIVATED':
+			return filterDashboardBySelectedRatingOrBorough(); 
+
 		case 'RESET':
 			return resetDashboard();
 
 		default:
 			return state;
+	}
+
+	function resetInputParkChoices() {
+		activeParks = state.allParks;
+
+		// nestedData = state.allNestedData.filter((d) =>
+		// 	d.value.parks.includes(park)
+		// );
+
+		// parksBasedOnActiveFilterRating = setSelectedParkToActive();
+
+		return {
+			...state,
+			// nestedData,
+			// parksBasedOnActiveFilterRating,
+			activeParks,
+			// activePark: park,
+			// // activeBorough: park.borough,
+			// activeNeighborhood: '',
+		};
 	}
 
 	function setInitialState() {
@@ -77,6 +97,7 @@ const parkReducer = (state, action) => {
 	}
 
 	function filterDashboardBySelectedPark() {
+		console.log('v')
 		park = action.payload.park;
 		activeParks = state.allParks.filter((d) => d.name === park.name);
 
@@ -151,7 +172,7 @@ const parkReducer = (state, action) => {
 		return (parksBasedOnActiveFilterRating = state.parksBasedOnActiveFilterRating.map(
 			(d) => {
 				if (d.name === park.name) {
-					console.log('FILTER_ACTIVE_PARK - d', d, d.name, park.name);
+					// console.log('FILTER_ACTIVE_PARK - d', d, d.name, park.name);
 				}
 				if (d.name === park.name) {
 					d.active = true;
