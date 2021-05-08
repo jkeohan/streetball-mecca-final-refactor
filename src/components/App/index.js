@@ -1,16 +1,16 @@
 import React, { useEffect, useReducer } from 'react';
 import './styles.css';
 // COMPONENTS
-import TopParks from '../ParkInfo/TopParks';
-import ParkImage from '../ParkInfo/ParkImage/image-spring';
-import Title from '../Title';
+import TopParks from '../FilterCategoriesAndParksByRating/ParksByRating';
+import ParkImage from '../ParkImage/image-spring';
+import Title from '../DashboardTitle';
 import Map from '../Map';
-import BarChart from '../BarChart/index_react'
-import DropDown from '../DropDown';
-import Input from '../InputBox';
+import BarChart from '../BarChart/index_react';
+import DropDown from '../FilterByBoroughDropDown';
+import Input from '../FilterByUserSearchAndDropDown';
 // import BarChart from '../BarChart/index_d3'
 // HELPERS
-import { formatData } from '../../services/format/formatters'
+import { formatData } from '../../services/format/formatters';
 // CUSTOM HOOKS
 import useDataApi from '../../hooks/useDataApi';
 // REDUCERS
@@ -29,22 +29,36 @@ const initialState = {
 };
 
 export default function App() {
-  const [parkData, dispatch] = useReducer(parkReducer, initialState);
+	const [parkData, dispatch] = useReducer(parkReducer, initialState);
 
-  const [{ data, isLoading }] = useDataApi(
-    'https://spreadsheets.google.com/feeds/list/1EJ5k2hkdldEz7yrvWSvkCs3Hm6aCU4Po4zBH6nVYvhU/od6/public/values?alt=json'
-  );
+	const [{ data, isLoading }] = useDataApi(
+		'https://spreadsheets.google.com/feeds/list/1EJ5k2hkdldEz7yrvWSvkCs3Hm6aCU4Po4zBH6nVYvhU/od6/public/values?alt=json'
+	);
 
-  useEffect(() => {
-    if (data.length) {
-      dispatch({
-        type: 'INITIAL_API_CALL',
-        payload: { data: formatData(data[0].feed.entry) }
-      });
-    }
-  }, [data]);
 
-  return (
+	useEffect(() => {
+		if (data.length) {
+			dispatch({
+				type: 'INITIAL_API_CALL',
+				payload: { data: formatData(data[0].feed.entry) },
+			});
+		}
+	}, [data]);
+
+	const handleUserItemSelection = (item) => {
+		dispatch({ type: 'FILTER_ACTIVE_PARK', payload: { item } });
+	};
+
+  const sortParksByName = Array.from(
+		parkData.parksBasedOnActiveFilterRating
+	).sort();
+    // parkData.parksBasedOnActiveFilterRating.sort((a, b) =>
+		// 	a.name > b.name ? 1 : -1
+		// );
+
+  	console.log('App - sortParksByName', sortParksByName);
+
+	return (
 		<div className='App'>
 			<main>
 				<Title />
@@ -63,7 +77,17 @@ export default function App() {
 								<Map {...parkData} dispatch={dispatch} />
 								<div id='filters'>
 									<div id='court'>
-										<Input {...parkData} dispatch={dispatch} />
+										<Input
+											activeInput={
+												parkData.activeParks.length === 1
+													? parkData.activePark.name
+													: ''
+											}
+											dispatch={handleUserItemSelection}
+											dropDownItems={sortParksByName}
+											label='Find A Court - all courts'
+											placeHolder='park name'
+										/>
 									</div>
 									<div id='borough'>
 										<DropDown {...parkData} dispatch={dispatch} />

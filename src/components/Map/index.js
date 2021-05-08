@@ -2,8 +2,8 @@ import React, { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 import useDataApi from '../../hooks/useDataApi';
 import { boroughLegend } from '../../services/legend'
-import DropDown from '../DropDown';
-import Input from '../InputBox';
+import DropDown from '../FilterByBoroughDropDown';
+import Input from '../FilterByUserSearchAndDropDown';
 import Circles from './Circles';
 import './styles.css';
 

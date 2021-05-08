@@ -1,12 +1,10 @@
 import React from 'react';
-import ParkRating from '../ParkRating'
-import ParkFilters from '../ParkFilters'
+import ParkRating from '../ParkByRating'
+import ParkFilters from '../FilterCategories'
 import { circleLegend } from '../../../services/legend'
 import './styles.css';
 
 const TopParks = ({
-	activeParks,
-	topParks,
 	parksBasedOnActiveFilterRating,
 	handleUpdateActivePark,
 	handleUpdateParkRating,
@@ -19,7 +17,6 @@ const TopParks = ({
 				name={d}
 				color={circleLegend(d)}
 				activeRating={activeRating}
-				// onClick={() => dispatch({type: 'FILTER_PARK_RATING' , payload: {rating: d}})}
 				handleUpdateParkRating={handleUpdateParkRating}
 				dispatch={dispatch}
 				className={d.toLocaleLowerCase()}
@@ -28,21 +25,16 @@ const TopParks = ({
 			</ParkFilters>
 		);
 	});
-
-//   console.log(
-// 		'TopParks -parksBasedOnActiveFilterRating ',
-// 		parksBasedOnActiveFilterRating
-// 	);
   
 	const renderParks =  parksBasedOnActiveFilterRating
-		.sort((a, b) => +b.overall - +a.overall)
+		// .sort((a, b) => +b.overall - +a.overall)
 		.map((d, i) => {
 			return (
 				<ParkRating
 					handleUpdateActivePark={handleUpdateActivePark}
 					dispatch={dispatch}
 					key={i}
-					park={d}
+					item={d}
 					active={d.active}
 				/>
 			);

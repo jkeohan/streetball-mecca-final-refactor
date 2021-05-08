@@ -1,8 +1,8 @@
-#parkChoices {
+#choice-options {
   /* display: none; */
   border: 2px solid #cecece;
   /* position: absolute; */
-  max-height: 350px;
+  max-height: 250px;
   padding: 10px 20px;
   /* width: 300px; */
   top: 40px;
@@ -11,7 +11,7 @@
   z-index: 1001;
 }
 
-.parkChoice {
+.choice {
   font-size: 15px;
   padding: 5px 0;
   cursor: pointer;

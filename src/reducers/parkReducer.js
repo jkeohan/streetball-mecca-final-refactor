@@ -25,7 +25,7 @@ const parkReducer = (state, action) => {
 			return filterDashboardBySelectedNeighborhood();
 
 		case 'CLEAR_INPUT_FIELD_ACTIVATED':
-			return filterDashboardBySelectedRatingOrBorough(); 
+			return filterDashboardBySelectedRatingOrBorough();
 
 		case 'RESET':
 			return resetDashboard();
@@ -56,7 +56,11 @@ const parkReducer = (state, action) => {
 
 	function setInitialState() {
 		allParks = setParkTextColorToBoroughColor();
-		parksBasedOnActiveFilterRating = allParks;
+		// allParks.sort((a, b) => (a.name > b.name ? 1 : -1));
+		console.log('setInitialState', allParks);
+		parksBasedOnActiveFilterRating = allParks.sort((a, b) =>
+			a.name > b.name ? 1 : -1
+		);
 		allNestedData = formatNestedData(action.payload.data);
 
 		return {
@@ -97,8 +101,8 @@ const parkReducer = (state, action) => {
 	}
 
 	function filterDashboardBySelectedPark() {
-		console.log('v')
-		park = action.payload.park;
+		console.log(' action.payload.park;', action.payload.item);
+		park = action.payload.item;
 		activeParks = state.allParks.filter((d) => d.name === park.name);
 
 		nestedData = state.allNestedData.filter((d) =>
@@ -106,6 +110,7 @@ const parkReducer = (state, action) => {
 		);
 
 		parksBasedOnActiveFilterRating = setSelectedParkToActive();
+		parksBasedOnActiveFilterRating.sort((a, b) => (a.name > b.name ? 1 : -1));
 
 		return {
 			...state,
