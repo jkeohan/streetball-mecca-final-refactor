@@ -1,5 +1,6 @@
 import React, {useEffect, useRef} from 'react';
 import {useSpring, animated} from 'react-spring'
+// import { preProcessFile } from 'typescript';
 
 const Circle = (props) => {
   // console.log('Circle - props', props.isShowing)
@@ -18,20 +19,25 @@ const Circle = (props) => {
   })
 
   return (
-    <>
-      <animated.circle {...style}
-        r={4}
-        transform={`translate(${props.proj})`}
-        fill={props.color}
-        code={props.code} 
-        onClick={(e,d) => { 
-          console.log('Circle - d', props)
-          props.dispatch({type: 'FILTER_ACTIVE_PARK', payload: { park:props.park}})
-          } 
-        }
-      />
-    </>
-  );
+		<>
+			<animated.circle
+				{...style}
+				r={4}
+				transform={`translate(${props.proj})`}
+				fill={props.color}
+				data-code={props.code}
+				data-park={props.park.name}
+				className={props.isShowing ? 'active' : ''}
+				onClick={(e, d) => {
+					console.log('Circle - d', props.park);
+					props.dispatch({
+						type: 'FILTER_ACTIVE_PARK',
+						payload: { item: props.park },
+					});
+				}}
+			/>
+		</>
+	);
 };
 
 export default Circle;

@@ -1,212 +1,36 @@
-import { formatNestedData } from '../services/format/formatters';
 import { colorLegendForParkText } from '../services/legend';
-import { sortTopParks, filterParksByNeighborhood } from '../helpers';
+import ParkReducerClass from './reducerClass'
 
-const parkReducer = (state, action) => {
-	let allParks,
-		parksBasedOnActiveFilterRating,
-		activeParks,
-		park,
-		allNestedData,
-		nestedData,
-		neighborhood;
+const reducer = (state, action) => {
+
+	let ParkReducer = new ParkReducerClass(state);
 
 	switch (action.type) {
 		case 'INITIAL_API_CALL':
-			return setInitialState();
+			const allParks = action.payload.data.map((d) => {
+					d.boroughColor = colorLegendForParkText(d.borough);
+					return d;
+			});
+			return  ParkReducer.initializeDashboard(allParks, state);
 
 		case 'FILTER_ACTIVE_RATING_OR_BOROUGH':
-			return filterDashboardBySelectedRatingOrBorough();
+			return ParkReducer.filterDashboardByActiveRatingOrBorough(action.payload)
 
 		case 'FILTER_ACTIVE_PARK':
-			return filterDashboardBySelectedPark();
+			return ParkReducer.filterDashboardByActivePark(action.payload.item);
 
 		case 'FILTER_ACTIVE_NEIGHBORHOOD':
-			return filterDashboardBySelectedNeighborhood();
+			return ParkReducer.filterDashboardByActiveNeighborhood(action.payload);
 
 		case 'CLEAR_INPUT_FIELD_ACTIVATED':
-			return filterDashboardBySelectedRatingOrBorough();
+			return ParkReducer.filterDashboardByActiveRatingOrBorough(action.payload);
 
 		case 'RESET':
-			return resetDashboard();
+			return ParkReducer.resetDashboard();
 
 		default:
 			return state;
 	}
-
-	function resetInputParkChoices() {
-		activeParks = state.allParks;
-
-		// nestedData = state.allNestedData.filter((d) =>
-		// 	d.value.parks.includes(park)
-		// );
-
-		// parksBasedOnActiveFilterRating = setSelectedParkToActive();
-
-		return {
-			...state,
-			// nestedData,
-			// parksBasedOnActiveFilterRating,
-			activeParks,
-			// activePark: park,
-			// // activeBorough: park.borough,
-			// activeNeighborhood: '',
-		};
-	}
-
-	function setInitialState() {
-		allParks = setParkTextColorToBoroughColor();
-		// allParks.sort((a, b) => (a.name > b.name ? 1 : -1));
-		console.log('setInitialState', allParks);
-		parksBasedOnActiveFilterRating = allParks.sort((a, b) =>
-			a.name > b.name ? 1 : -1
-		);
-		allNestedData = formatNestedData(action.payload.data);
-
-		return {
-			...state,
-			allNestedData,
-			nestedData: allNestedData,
-			allParks,
-			parksBasedOnActiveFilterRating,
-			activeParks: allParks,
-			activePark: sortTopParks(parksBasedOnActiveFilterRating)[0],
-		};
-	}
-
-	function setParkTextColorToBoroughColor() {
-		return action.payload.data.map((d) => {
-			d.boroughColor = colorLegendForParkText(d.borough);
-			return d;
-		});
-	}
-
-	function filterDashboardBySelectedNeighborhood() {
-		neighborhood = filterParksByNeighborhood(
-			state.nestedData,
-			action.payload.neighborhood.key
-		);
-		activeParks = neighborhood[0].value.parks;
-		console.log(
-			'filterDashboardBySelectedNeighborhood - neighborhood',
-			neighborhood
-		);
-		return {
-			...state,
-			activeParks,
-			parksBasedOnActiveFilterRating: activeParks,
-			activeBorough: action.payload.neighborhood.value.borough,
-			activeNeighborhood: action.payload.neighborhood.key,
-		};
-	}
-
-	function filterDashboardBySelectedPark() {
-		console.log(' action.payload.park;', action.payload.item);
-		park = action.payload.item;
-		activeParks = state.allParks.filter((d) => d.name === park.name);
-
-		nestedData = state.allNestedData.filter((d) =>
-			d.value.parks.includes(park)
-		);
-
-		parksBasedOnActiveFilterRating = setSelectedParkToActive();
-		parksBasedOnActiveFilterRating.sort((a, b) => (a.name > b.name ? 1 : -1));
-
-		return {
-			...state,
-			nestedData,
-			parksBasedOnActiveFilterRating,
-			activeParks,
-			activePark: park,
-			activeBorough: park.borough,
-			activeNeighborhood: '',
-		};
-	}
-
-	function filterDashboardBySelectedRatingOrBorough() {
-		const { rating, borough } = setRatingAndBorough();
-		activeParks = filterParksByRatingAndBorough();
-		parksBasedOnActiveFilterRating = activeParks;
-		nestedData = filterNeighborhoodsByRatingOrBorough(activeParks);
-
-		return {
-			...state,
-			nestedData,
-			activeParks,
-			parksBasedOnActiveFilterRating,
-			activeRating: rating,
-			activeBorough: borough,
-			activeNeighborhood: '',
-		};
-	}
-
-	function filterNeighborhoodsByRatingOrBorough(activeParks) {
-		let activeNeighborhoods = Array.from(
-			new Set(activeParks.map((d) => d.neighborhood))
-		);
-
-		return state.allNestedData.filter((d) =>
-			activeNeighborhoods.includes(d.key)
-		);
-	}
-
-	function filterParksByRatingAndBorough() {
-		const { rating, borough } = setRatingAndBorough();
-
-		return state.allParks
-			.filter((d) => filterParksByRating(d, rating))
-			.filter((d) => filterParksByBorough(d, borough));
-	}
-
-	function filterParksByRating(park, filter) {
-		return filter === '' ? park : park.rating === filter;
-	}
-
-	function filterParksByBorough(park, filter) {
-		return filter === 'all' ? park : park.borough === filter;
-	}
-
-	function setRatingAndBorough() {
-		return {
-			rating: action.payload.rating || state.activeRating,
-			borough: action.payload.borough || state.activeBorough,
-		};
-	}
-
-	function setSelectedParkToActive() {
-		return (parksBasedOnActiveFilterRating = state.parksBasedOnActiveFilterRating.map(
-			(d) => {
-				if (d.name === park.name) {
-					// console.log('FILTER_ACTIVE_PARK - d', d, d.name, park.name);
-				}
-				if (d.name === park.name) {
-					d.active = true;
-				} else {
-					d.active = false;
-				}
-				return d;
-			}
-		));
-	}
-
-	function resetDashboard() {
-		parksBasedOnActiveFilterRating = state.allParks.map((d) => {
-			d.active = false;
-			return d;
-		});
-
-		return {
-			...state,
-			nestedData: state.allNestedData,
-			parksBasedOnActiveFilterRating,
-			activeParks: state.allParks,
-			activePark: sortTopParks(parksBasedOnActiveFilterRating)[0],
-			activeRating: '',
-			activeBorough: 'all',
-			activeNeighborhood: '',
-			reset: false,
-		};
-	}
 };
 
-export default parkReducer;
+export default reducer;

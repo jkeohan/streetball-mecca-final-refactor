@@ -27,7 +27,7 @@ const TopParks = ({
 	});
   
 	const renderParks =  parksBasedOnActiveFilterRating
-		// .sort((a, b) => +b.overall - +a.overall)
+		.sort((a, b) => +b.overall - +a.overall)
 		.map((d, i) => {
 			return (
 				<ParkRating

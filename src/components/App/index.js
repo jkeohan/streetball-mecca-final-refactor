@@ -11,25 +11,30 @@ import Input from '../FilterByUserSearchAndDropDown';
 // import BarChart from '../BarChart/index_d3'
 // HELPERS
 import { formatData } from '../../services/format/formatters';
+// import { colorLegendForParkText } from '../../services/legend';
 // CUSTOM HOOKS
 import useDataApi from '../../hooks/useDataApi';
 // REDUCERS
 import parkReducer from '../../reducers/parkReducer';
 
 const initialState = {
+	activeBorough: 'all',
+	activeNeighborhood: "",
 	activePark: {},
 	activeParks: [],
 	activeRating: '',
-	activeBorough: 'all',
-	allParks: [],
 	allNestedData: [],
-	nestedData: [],
+	allParks: [],
+	// park: {},
 	parksBasedOnActiveFilterRating: [],
+	neighborhood: [],
+	nestedData: [],
 	reset: false,
 };
 
 export default function App() {
 	const [parkData, dispatch] = useReducer(parkReducer, initialState);
+	console.log('App - parkData', parkData)
 
 	const [{ data, isLoading }] = useDataApi(
 		'https://spreadsheets.google.com/feeds/list/1EJ5k2hkdldEz7yrvWSvkCs3Hm6aCU4Po4zBH6nVYvhU/od6/public/values?alt=json'
@@ -56,7 +61,7 @@ export default function App() {
 		// 	a.name > b.name ? 1 : -1
 		// );
 
-  	console.log('App - sortParksByName', sortParksByName);
+  	// console.log('App - sortParksByName', sortParksByName);
 
 	return (
 		<div className='App'>
@@ -107,15 +112,6 @@ export default function App() {
 						</p>
 					</div>
 					<BarChart {...parkData} dispatch={dispatch} />
-					{/* <article className="rectToolTip">
-            <p className='title'>Central Park</p>
-            <p className='avg'>Avg. Overall Rating: 83/100</p>
-          </article>
-          <article className='circleToolTip'>
-            <p className='title'>Central Park (Great Lake)</p>
-            <p className='neighborhood'>Central Park, Manhattan</p>
-            <p className='avg'>Overall: 83/100</p>
-          </article> */}
 				</section>
 			</main>
 		</div>

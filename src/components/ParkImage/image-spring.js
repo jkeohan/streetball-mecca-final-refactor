@@ -8,6 +8,7 @@ import { useTransition, animated } from 'react-spring';
 import './styles.css';
 
 const ParkImage = ({ activePark }) => {
+  // console.log('ParkImage - activePark ', activePark);
 
   const transitions = useTransition(activePark, (image) => image.code, {
     from: { opacity: 0 },

@@ -5,6 +5,7 @@ import './styles.css';
 
 const ParkImage = ({ activePark }) => {
   const [transitionActive, setTransitionActive] = useState(true);
+  console.log('ParkImage - activePark ', activePark);
   // const [image, setImage] = useState({
   //   backgroundImage: ``
   // })

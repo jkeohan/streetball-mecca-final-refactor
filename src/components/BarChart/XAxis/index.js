@@ -1,6 +1,6 @@
 import React from 'react';
 import './styles.css';
-import * as d3 from 'd3';
+// import * as d3 from 'd3';
 
 const Axis = ({xScale}) => {
 
