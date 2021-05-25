@@ -32,7 +32,7 @@ class ParkReducer {
 		this.setRatingAndBorough(payload);
 		this.setParksFilteredForMapAndRatingSection();
 		this.filterNeighborhoodsByRatingOrBorough();
-
+		this.activeNeighborhood = ''
 		return this.updatedState();
 	}
 	// 'FILTER_ACTIVE_PARK'
@@ -103,7 +103,6 @@ class ParkReducer {
 			return d;
 		});
 		this.nestedData = this.allNestedData;
-		this.parksFilteredForRatingSection = this.parksFilteredForRatingSection;
 		this.parksFilteredForMap = this.state.allParks;
 		this.activePark = this.sortParksByRating(
 			this.parksFilteredForRatingSection
