@@ -23,7 +23,7 @@ class ParkReducer {
 		this.parksFilteredForMap = initialData;
 		this.allNestedData = this.formatNestedData(initialData);
 		this.allParks = initialData;
-		this.parksFilteredForRatingSection = initialData
+		this.parksFilteredForRatingSection = initialData;
 
 		return this.updatedState();
 	}
@@ -32,7 +32,7 @@ class ParkReducer {
 		this.setRatingAndBorough(payload);
 		this.setParksFilteredForMapAndRatingSection();
 		this.filterNeighborhoodsByRatingOrBorough();
-		this.activeNeighborhood = ''
+		this.activeNeighborhood = '';
 		return this.updatedState();
 	}
 	// 'FILTER_ACTIVE_PARK'
@@ -54,19 +54,13 @@ class ParkReducer {
 	filterDashboardByActiveNeighborhood(payload) {
 		this.activeNeighborhood = payload.neighborhood.key;
 		this.parksFilteredForMap = this.filterParksByNeighborhood()[0].value.parks;
-		this.parksFilteredForRatingSection = this.filterParksByNeighborhood()[0].value.parks;
+		this.parksFilteredForRatingSection =
+			this.filterParksByNeighborhood()[0].value.parks;
 		this.activeBorough = payload.neighborhood.value.borough;
 		this.activeRating = '';
 
 		return this.updatedState();
 	}
-
-	filterActiveParks = () =>
-		this.allParks.filter((d) => d.name === this.activePark.name);
-
-	// SUPPORTING FILTER METHODS
-	filterParksByNeighborhood = () =>
-		this.allNestedData.filter((d) => d.key === this.activeNeighborhood);
 
 	filterNeighborhoodsByRatingOrBorough() {
 		let activeNeighborhoods = Array.from(
@@ -80,22 +74,21 @@ class ParkReducer {
 
 	filterParksByRatingAndBorough = () =>
 		this.allParks
-			.filter((d) => this.filterParksByRating(d, this.activeRating))
-			.filter((d) => this.filterParksByBorough(d, this.activeBorough));
+			.filter( (park) => this.activeRating === '' ? park : park.rating === this.activeRating)
+			.filter( (park) => 	this.activeBorough === 'all' ? park : park.borough === this.activeBorough);
 
 	filterParksByActiveParkOrInput = () => {
-		this.parksFilteredForMap = this.filterActiveParks();
+		this.parksFilteredForMap = [this.activePark]
 		this.activeBorough = this.activePark.borough;
 		this.activeNeighborhood = this.activePark.neighborhood;
 		this.nestedData = this.filterParksByNeighborhood();
 		this.parksFilteredForRatingSection = this.setSelectedParkToActive();
 	};
 
-	filterParksByRating = (park, filter) =>
-		filter === '' ? park : park.rating === filter;
+	// SUPPORTING FILTER METHODS
+	filterParksByNeighborhood = () =>
+		this.allNestedData.filter((d) => d.key === this.activeNeighborhood);
 
-	filterParksByBorough = (park, filter) =>
-		filter === 'all' ? park : park.borough === filter;
 
 	resetDashboard() {
 		this.parksFilteredForRatingSection = this.allParks.map((d) => {
@@ -145,7 +138,6 @@ class ParkReducer {
 	// SUPPORTING SORTING METHODS
 	sortParksByRating = (parksArray) =>
 		parksArray.sort((a, b) => d3.descending(+a.overall, +b.overall));
-
 
 	updatedState = () => {
 		let activePark = this.activePark;
