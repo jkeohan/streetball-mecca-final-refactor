@@ -19,14 +19,14 @@ import parkReducer from '../../reducers/parkReducer';
 
 const initialState = {
 	activeBorough: 'all',
-	activeNeighborhood: "",
+	activeNeighborhood: '',
 	activePark: {},
-	activeParks: [],
+	parksFilteredForMap: [],
 	activeRating: '',
 	allNestedData: [],
 	allParks: [],
 	// park: {},
-	parksBasedOnActiveFilterRating: [],
+	parksFilteredForRatingSection: [],
 	neighborhood: [],
 	nestedData: [],
 	reset: false,
@@ -54,10 +54,11 @@ export default function App() {
 		dispatch({ type: 'FILTER_ACTIVE_PARK_BY_INPUT', payload: { item } });
 	};
 
-  const sortParksByName = Array.from(
-		parkData.parksBasedOnActiveFilterRating
-	).sort();
-    // parkData.parksBasedOnActiveFilterRating.sort((a, b) =>
+  const addStylesToDropDownItems = parkData.parksFilteredForRatingSection.map( park => {
+	 park.style = { color: park.boroughColor }
+	 return park
+  })
+    // parkData.parksFilteredForRatingSection.sort((a, b) =>
 		// 	a.name > b.name ? 1 : -1
 		// );
 
@@ -84,14 +85,14 @@ export default function App() {
 									<div id='court'>
 										<Input
 											activeInput={
-												parkData.activeParks.length === 1
+												parkData.parksFilteredForMap.length === 1
 													? parkData.activePark.name
 													: ''
 											}
 											dispatch={handleUserItemSelection}
-											dropDownItems={sortParksByName}
+											dropDownItems={addStylesToDropDownItems}
 											label='Find A Court - all courts'
-											placeHolder='park name'
+											placeHolderText='park name'
 										/>
 									</div>
 									<div id='borough'>

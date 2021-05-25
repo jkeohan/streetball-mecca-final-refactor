@@ -17,10 +17,10 @@ const reducer = (state, action) => {
 			return ParkReducer.filterDashboardByActiveRatingOrBorough(action.payload);
 
 		case 'FILTER_ACTIVE_PARK':
-			return ParkReducer.filterDashboardByActivePark(action.payload.item);
+			return ParkReducer.filterDashboardByActivePark(action.payload);
 
 		case 'FILTER_ACTIVE_PARK_BY_INPUT':
-			return ParkReducer.filterDashboardByInput(action.payload.item);
+			return ParkReducer.filterDashboardByInput(action.payload);
 
 		case 'FILTER_ACTIVE_NEIGHBORHOOD':
 			return ParkReducer.filterDashboardByActiveNeighborhood(action.payload);

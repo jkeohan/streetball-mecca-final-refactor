@@ -9,15 +9,15 @@ const Circles= (props) => {
         const proj = props.projection([+d.lon, +d.lat])
 
        return (
-          <Circle  
-           {...props}
-           {...d}
-            park={d}
-            key={i}
-            proj={proj}
-            isShowing={props.activeParks.includes(d)}
-          />
-       )
+					<Circle
+						{...props}
+						{...d}
+						park={d}
+						key={i}
+						proj={proj}
+						isShowing={props.parksFilteredForMap.includes(d)}
+					/>
+				);
       })}
     </>
   )

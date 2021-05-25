@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import './styles.css';
 
-const Input = ({ activeInput, dispatch, dropDownItems, placeHolder }) => {
+const Input = ({ activeInput, dispatch, dropDownItems, placeHolderText }) => {
 	const [inputVal, setInputVal] = useState(activeInput ? activeInput : '');
 	const [isDropDownActive, setIsDropDownActive] = useState(false);
 	const [filteredDropDownChoices, setFilteredDropDownChoices] = useState(
@@ -51,8 +51,8 @@ const Input = ({ activeInput, dispatch, dropDownItems, placeHolder }) => {
 		.map((item, index) => (
 			<div
 				key={index}
-				className={`choice ${item.code}`}
-				style={{ color: item.boroughColor }}
+				className='choice'
+				style={item.style ? item.style : ''}
 				onClick={() => handleUserItemSelection(item)}>
 				{item.name}
 			</div>
@@ -76,7 +76,7 @@ const Input = ({ activeInput, dispatch, dropDownItems, placeHolder }) => {
 				name='name'
 				value={inputVal}
 				type='text'
-				placeholder={placeHolder}
+				placeholder={placeHolderText}
 			/>
 			{isDropDownActive ? (
 				<div ref={ref} id='choice-options'>

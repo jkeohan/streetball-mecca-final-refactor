@@ -1,11 +1,11 @@
 import React from 'react';
-import ParkRating from '../ParkByRating'
+import ParkRating from './ParkByRating'
 import ParkFilters from '../FilterCategories'
 import { circleLegend } from '../../../services/legend'
 import './styles.css';
 
 const TopParks = ({
-	parksBasedOnActiveFilterRating,
+	parksFilteredForRatingSection,
 	handleUpdateActivePark,
 	handleUpdateParkRating,
 	activeRating,
@@ -25,8 +25,8 @@ const TopParks = ({
 			</ParkFilters>
 		);
 	});
-  
-	const renderParks =  parksBasedOnActiveFilterRating
+
+	const renderParks = parksFilteredForRatingSection
 		.sort((a, b) => +b.overall - +a.overall)
 		.map((d, i) => {
 			return (
