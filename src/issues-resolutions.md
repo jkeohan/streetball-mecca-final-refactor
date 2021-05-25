@@ -31,3 +31,7 @@ setParkData( prevState => ({
   activeParks: formattedData,
 }));
 ```
+
+
+ISSUE: images only transition 
+RESOLUTION: import {nest} from 'd3-collection';

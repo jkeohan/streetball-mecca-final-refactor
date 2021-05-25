@@ -37,6 +37,7 @@ const Title = styled.div`
   letter-spacing: 4px;
 `;
 
+
 const ParkImage = ({ activePark }) => {
   let fadeInAnimation = keyframes`${fadeIn}`;
   const FadeInImage = styled.div`

@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef } from 'react';
-// import { createNoSubstitutionTemplateLiteral } from 'typescript';
 import './styles.css';
 
 const Input = ({ activeInput, dispatch, dropDownItems, placeHolder }) => {
@@ -8,7 +7,6 @@ const Input = ({ activeInput, dispatch, dropDownItems, placeHolder }) => {
 	const [filteredDropDownChoices, setFilteredDropDownChoices] = useState(
 		dropDownItems
 	);
-	// console.log('Input - dropDownItems', dropDownItems);
 	const ref = useRef();
 
 	useEffect(() => {
@@ -25,7 +23,7 @@ const Input = ({ activeInput, dispatch, dropDownItems, placeHolder }) => {
 	}, [ref]);
 
 	const onClickOutsideInputBox = (event) => {
-		console.log('onClickOutsideInputBox - event', event);
+		// console.log('onClickOutsideInputBox - event', event);
 		switch (true) {
 			case !ref.current && event.target.name === 'name':
 				setIsDropDownActive(true);
@@ -60,15 +58,11 @@ const Input = ({ activeInput, dispatch, dropDownItems, placeHolder }) => {
 			</div>
 		));
 
-	// const handleToggleToDisplayParkSelection = () =>
-	// 	setIsDropDownActive(!isDropDownActive);
-
 	const handleChange = (event) => {
 		const inputVal = event.target.value;
 		const filteredDropDownItems = dropDownItems.filter((park) =>
 			park.name.toLowerCase().includes(inputVal.toLowerCase())
 		);
-
 		setFilteredDropDownChoices(filteredDropDownItems);
 		setInputVal(inputVal);
 		setIsDropDownActive(true);
@@ -95,14 +89,4 @@ const Input = ({ activeInput, dispatch, dropDownItems, placeHolder }) => {
 	);
 };
 
-// export default MemoizedInput= memo(Input)
 export default Input;
-
-// function areEqual(prevPark, nextPark) {
-//   console.log('ParkImage - areEqual', prevPark.activeParks, nextPark.activeParks)
-//   console.log('ParkImage - areEqual', prevPark.activeParks !== nextPark.activeParks)
-//   return prevPark.activeParks === nextPark.activeParks
-// }
-
-// const MemoizedInput = React.memo(Input, areEqual);
-// export default MemoizedInput

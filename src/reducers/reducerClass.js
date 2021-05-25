@@ -4,112 +4,125 @@ import { nest } from 'd3-collection';
 class ParkReducer {
 	constructor(state) {
 		this.state = state;
+		this.activePark = state.activePark;
+		this.activeParks = state.activeParks;
+		this.allNestedData = state.allNestedData;
+		this.activeBorough = state.activeBorough;
+		this.activeNeighborhood = state.activeNeighborhood;
+		this.activeRating = state.activeRating;
+		this.allParks = state.allParks;
+		this.parksBasedOnActiveFilterRating = state.parksBasedOnActiveFilterRating;
+		this.neighborhood = state.neighborhood;
+		this.nestedData = state.nestedData;
+		this.reset = state.reset;
 	}
-
 	// 'INITIAL_API_CALL'
 	initializeDashboard(initialData) {
-		this.state.activePark = this.sortParksByRating(initialData)[0];
-		this.state.activeParks = initialData;
-		this.state.allNestedData = this.formatNestedData(initialData);
-		this.state.allParks = initialData;
-		this.state.nestedData = this.state.allNestedData;
-		this.state.parksBasedOnActiveFilterRating =
-			this.sortParksByName(initialData);
-
-		return { ...this.state };
+		this.nestedData = this.formatNestedData(initialData);
+		this.activePark = this.sortParksByRating(initialData)[0];
+		this.activeParks = initialData;
+		this.allNestedData = this.formatNestedData(initialData);
+		this.allParks = initialData;
+		this.parksBasedOnActiveFilterRating = this.sortParksByName(initialData);
+		
+		return this.updatedState();
 	}
 	// 'FILTER_ACTIVE_RATING_OR_BOROUGH'
 	filterDashboardByActiveRatingOrBorough(payload) {
 		this.setRatingAndBorough(payload);
-		this.state.activeParks = this.filterParksByRatingAndBorough();
-		this.state.parksBasedOnActiveFilterRating = this.state.activeParks;
-		this.state.nestedData = this.filterNeighborhoodsByRatingOrBorough(
-			this.state.activeParks
+		this.activeParks = this.filterParksByRatingAndBorough();
+		this.parksBasedOnActiveFilterRating = this.activeParks;
+		this.nestedData = this.filterNeighborhoodsByRatingOrBorough(
+			this.activeParks
 		);
-
-		return { ...this.state };
+		return this.updatedState();
 	}
 	// 'FILTER_ACTIVE_PARK'
 	filterDashboardByActivePark(item) {
-		console.log('filterDashboardBySelectedPark - item', item);
-		this.state.activePark = item;
-		this.state.activeParks = this.state.allParks.filter(
-			(d) => d.name === item.name
-		);
+		this.activePark = item;
+		this.activeParks = this.allParks.filter((d) => d.name === item.name);
 
-		this.nestedData = this.state.allNestedData.filter((d) =>
-			d.value.parks.includes(item.name)
-		);
+		this.nestedData = this.allNestedData.filter((d) => {
+			return d.value.parks.includes(item);
+		});
 
 		this.parksBasedOnActiveFilterRating = this.setSelectedParkToActive();
 		this.parksBasedOnActiveFilterRating.sort((a, b) =>
 			a.name > b.name ? 1 : -1
 		);
-		this.state.activeBorough = item.borough;
-		this.state.activeNeighborhood = '';
+		this.activeBorough = item.borough;
+		this.activeNeighborhood = '';
+		return this.updatedState();
+	}
+	// 'FILTER_ACTIVE_PARK'
+	filterDashboardByInput(item) {
+		// console.log('filterDashboardBySelectedPark - item', item);
+		this.activePark = item;
+		this.activeParks = this.allParks.filter((d) => d.name === item.name);
 
-		return {
-			...this.state,
-		};
+		this.nestedData = this.allNestedData.filter((d) => {
+			console.log(d.value.parks.includes(item.name), item.name, d.value.parks);
+			return d.value.parks.includes(item);
+		});
+
+		this.parksBasedOnActiveFilterRating = this.nestedData[0].value.parks;
+		this.parksBasedOnActiveFilterRating = this.setSelectedParkToActive();
+		this.parksBasedOnActiveFilterRating.sort((a, b) =>
+			a.name > b.name ? 1 : -1
+		);
+
+		this.activeBorough = item.borough;
+		this.activeNeighborhood = item.neighborhood;
+		// console.log('filterDashboardByActivePark', this.updatedState());
+		return this.updatedState();
 	}
 	// 'CLEAR_INPUT_FIELD_ACTIVATED'
 	filterDashboardByActiveNeighborhood(payload) {
-		console.log(
-			'filterParksByNeighborhood',
-			this.neighborhood,
-			payload.neighborhood
-		);
-		this.state.neighborhood = this.filterParksByNeighborhood(
-			payload.neighborhood.key
-		);
+		this.activeNeighborhood = payload.neighborhood.key;
+		this.neighborhood = this.filterParksByNeighborhood();
+		this.activeParks = this.neighborhood[0].value.parks;
+		this.parksBasedOnActiveFilterRating = this.activeParks;
+		this.activeBorough = payload.neighborhood.value.borough;
+		this.activeNeighborhood = payload.neighborhood.key;
+		this.activeRating = '';
 
-		this.state.activeParks = this.state.neighborhood[0].value.parks;
-		this.state.parksBasedOnActiveFilterRating = this.state.activeParks;
-		this.state.activeBorough = payload.neighborhood.value.borough;
-		this.state.activeNeighborhood = payload.neighborhood.key;
-		this.state.activeRating = '';
-
-		return { ...this.state };
+		return this.updatedState();
 	}
-
 	// SUPPORTING FILTER METHODS
-	filterParksByNeighborhood = (filter) => {
-		console.log(
-			'neighborhood',
-			this.state.allNestedData,
-			this.state.nestedData,
-			filter
-		);
-		const neighborhood = this.state.nestedData.filter((d) => d.key === filter);
-		return neighborhood;
-	};
+	filterParksByNeighborhood = () =>
+		this.nestedData.filter((d) => d.key === this.activeNeighborhood);
 
 	filterNeighborhoodsByRatingOrBorough(activeParks) {
 		let activeNeighborhoods = Array.from(
-			new Set(this.state.activeParks.map((d) => d.neighborhood))
+			new Set(this.activeParks.map((d) => d.neighborhood))
 		);
-		// console.log('neighborhood', this.activeParks, this.allNestedData, this.nestedData, this.state);
-		return this.state.allNestedData.filter((d) =>
+
+		console.log(
+			'neighborhood',
+			this.activeParks,
+			this.allNestedData,
+			this.nestedData,
+			this.state
+		);
+		return this.allNestedData.filter((d) =>
 			activeNeighborhoods.includes(d.key)
 		);
 	}
 
 	filterParksByRatingAndBorough() {
-		return this.state.allParks
-			.filter((d) => this.filterParksByRating(d, this.state.activeRating))
-			.filter((d) => this.filterParksByBorough(d, this.state.activeBorough));
+		return this.allParks
+			.filter((d) => this.filterParksByRating(d, this.activeRating))
+			.filter((d) => this.filterParksByBorough(d, this.activeBorough));
 	}
 
-	filterParksByRating(park, filter) {
-		return filter === '' ? park : park.rating === filter;
-	}
+	filterParksByRating = (park, filter) =>
+		filter === '' ? park : park.rating === filter;
 
-	filterParksByBorough(park, filter) {
-		return filter === 'all' ? park : park.borough === filter;
-	}
+	filterParksByBorough = (park, filter) =>
+		filter === 'all' ? park : park.borough === filter;
 
 	resetDashboard() {
-		this.parksBasedOnActiveFilterRating = this.state.allParks.map((d) => {
+		this.parksBasedOnActiveFilterRating = this.allParks.map((d) => {
 			d.active = false;
 			return d;
 		});
@@ -130,16 +143,15 @@ class ParkReducer {
 	}
 
 	setRatingAndBorough(payload) {
-		this.state.activeRating = payload.rating || this.state.activeRating;
-		this.state.activeBorough = payload.borough || this.state.activeBorough;
+		this.activeRating = payload.rating || this.activeRating;
+		this.activeBorough = payload.borough || this.activeBorough;
 	}
 
 	setSelectedParkToActive() {
-		return (this.parksBasedOnActiveFilterRating =
-			this.state.parksBasedOnActiveFilterRating.map((d) => {
-				d.active = d.name === this.state.activePark.name ? true : false;
-				return d;
-			}));
+		return this.parksBasedOnActiveFilterRating.map((d) => {
+			d.active = d.name === this.activePark.name ? true : false;
+			return d;
+		});
 	}
 
 	formatNestedData = (data) => {
@@ -162,36 +174,36 @@ class ParkReducer {
 
 	sortParksByName = (parksArray) =>
 		parksArray.sort((a, b) => (a.name > b.name ? 1 : -1));
+
+	updatedState = () => {
+		let activePark = this.activePark;
+		let activeParks = this.activeParks;
+		let allNestedData = this.allNestedData;
+		let activeBorough = this.activeBorough;
+		let activeNeighborhood = this.activeNeighborhood;
+		let activeRating = this.activeRating;
+		let allParks = this.allParks;
+		let parksBasedOnActiveFilterRating = this.parksBasedOnActiveFilterRating;
+		let neighborhood = this.neighborhood;
+		let nestedData = this.nestedData;
+		let reset = this.reset;
+
+		return {
+			activePark,
+			activeParks,
+			activeBorough,
+			activeNeighborhood,
+			activeRating,
+			activePark,
+			activeParks,
+			allNestedData,
+			allParks,
+			parksBasedOnActiveFilterRating,
+			neighborhood,
+			nestedData,
+			reset,
+		};
+	};
 }
 
 export default ParkReducer;
-
-// this.activeBorough = state.activeBorough;
-// this.activeNeighborhood = state.activeNeighborhood;
-// this.activePark = state.activePark;
-// this.activeParks = state.activeParks;
-// this.activeRating = state.activeRating;
-// this.allNestedData = state.allNestedData;
-// this.allParks = state.allParks;
-// // this.park = state.park;
-// this.parksBasedOnActiveFilterRating = state.parksBasedOnActiveFilterRating;
-// this.neighborhood = state.neighborhood;
-// this.nestedData = state.nestedData;
-// this.reset = state.reset;
-
-// return {
-// 	...this.state,
-// 	// activeBorough: this.activeBorough,
-// 	// activePark: this.activePark,
-// 	// activeParks: this.activeParks,
-// 	// activeNeighborhood: this.activeNeighborhood,
-// 	// activeRating: this.activeRating,
-// 	// parksBasedOnActiveFilterRating: this.parksBasedOnActiveFilterRating,
-// 	// nestedData: this.nestedData,
-// 	//
-// 	// allNestedData: this.allNestedData,
-// 	// allParks: this.allParks,
-// 	// park: this.park,
-// 	// neighborhood: this.neighborhood,
-// 	// reset: this.reset,
-// };

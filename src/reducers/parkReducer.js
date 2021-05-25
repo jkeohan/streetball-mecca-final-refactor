@@ -8,16 +8,19 @@ const reducer = (state, action) => {
 	switch (action.type) {
 		case 'INITIAL_API_CALL':
 			const allParks = action.payload.data.map((d) => {
-					d.boroughColor = colorLegendForParkText(d.borough);
-					return d;
+				d.boroughColor = colorLegendForParkText(d.borough);
+				return d;
 			});
-			return  ParkReducer.initializeDashboard(allParks, state);
+			return ParkReducer.initializeDashboard(allParks, state);
 
 		case 'FILTER_ACTIVE_RATING_OR_BOROUGH':
-			return ParkReducer.filterDashboardByActiveRatingOrBorough(action.payload)
+			return ParkReducer.filterDashboardByActiveRatingOrBorough(action.payload);
 
 		case 'FILTER_ACTIVE_PARK':
 			return ParkReducer.filterDashboardByActivePark(action.payload.item);
+
+		case 'FILTER_ACTIVE_PARK_BY_INPUT':
+			return ParkReducer.filterDashboardByInput(action.payload.item);
 
 		case 'FILTER_ACTIVE_NEIGHBORHOOD':
 			return ParkReducer.filterDashboardByActiveNeighborhood(action.payload);

@@ -51,7 +51,7 @@ export default function App() {
 	}, [data]);
 
 	const handleUserItemSelection = (item) => {
-		dispatch({ type: 'FILTER_ACTIVE_PARK', payload: { item } });
+		dispatch({ type: 'FILTER_ACTIVE_PARK_BY_INPUT', payload: { item } });
 	};
 
   const sortParksByName = Array.from(
