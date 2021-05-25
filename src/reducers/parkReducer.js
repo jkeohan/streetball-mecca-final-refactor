@@ -14,7 +14,7 @@ const reducer = (state, action) => {
 			return ParkReducer.initializeDashboard(allParks, state);
 
 		case 'FILTER_ACTIVE_RATING_OR_BOROUGH':
-			return ParkReducer.filterDashboardByActiveRatingOrBorough(action.payload);
+			return ParkReducer.filterDashboardByActiveRatingAndBorough(action.payload);
 
 		case 'FILTER_ACTIVE_PARK':
 			return ParkReducer.filterDashboardByActivePark(action.payload);
