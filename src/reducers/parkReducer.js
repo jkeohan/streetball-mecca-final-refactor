@@ -11,7 +11,7 @@ const reducer = (state, action) => {
 				d.boroughColor = colorLegendForParkText(d.borough);
 				return d;
 			});
-			return ParkReducer.initializeDashboard(allParks, state);
+			return ParkReducer.initializeDashboard(allParks);
 
 		case 'FILTER_ACTIVE_RATING_OR_BOROUGH':
 			return ParkReducer.filterDashboardByActiveRatingAndBorough(action.payload);
