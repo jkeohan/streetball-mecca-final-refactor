@@ -54,8 +54,7 @@ class ParkReducer {
 	filterDashboardByActiveNeighborhood(payload) {
 		this.activeNeighborhood = payload.neighborhood.key;
 		this.parksFilteredForMap = this.filterParksByNeighborhood()[0].value.parks;
-		this.parksFilteredForRatingSection =
-			this.filterParksByNeighborhood()[0].value.parks;
+		this.parksFilteredForRatingSection = this.filterParksByNeighborhood()[0].value.parks;
 		this.activeBorough = payload.neighborhood.value.borough;
 		this.activeRating = '';
 
