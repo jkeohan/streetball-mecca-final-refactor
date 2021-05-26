@@ -38,14 +38,14 @@ class ParkReducer {
 	// 'FILTER_ACTIVE_PARK'
 	filterDashboardByActivePark(payload) {
 		this.activePark = payload.item;
-		this.filterParksByActiveParkOrInput();
+		this.filterParksByParkRatingSectionOrInputChoice();
 
 		return this.updatedState();
 	}
 	// 'FILTER_ACTIVE_PARK_BY_INPUT'
 	filterDashboardByInput(payload) {
 		this.activePark = payload.item;
-		this.filterParksByActiveParkOrInput();
+		this.filterParksByParkRatingSectionOrInputChoice();
 		this.parksFilteredForRatingSection = this.nestedData[0].value.parks;
 
 		return this.updatedState();
@@ -83,7 +83,7 @@ class ParkReducer {
 					: park.borough === this.activeBorough
 			);
 
-	filterParksByActiveParkOrInput = () => {
+	filterParksByParkRatingSectionOrInputChoice = () => {
 		this.parksFilteredForMap = [this.activePark];
 		this.activeBorough = this.activePark.borough;
 		this.activeNeighborhood = this.activePark.neighborhood;
