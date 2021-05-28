@@ -1,7 +1,7 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer, createContext} from 'react';
 import './styles.css';
 // COMPONENTS
-import TopParks from '../FilterCategoriesAndParksByRating/ParksByRating';
+import ParksByRating from '../FilterCategoriesAndParksByRating/ParksByRating';
 import ParkImage from '../ParkImage/image-spring';
 import Title from '../DashboardTitle';
 import Map from '../Map';
@@ -32,6 +32,8 @@ const initialState = {
 	reset: false,
 };
 
+export const DataContext = createContext();
+
 export default function App() {
 	const [parkData, dispatch] = useReducer(parkReducer, initialState);
 	console.log('App - parkData', parkData)
@@ -58,63 +60,60 @@ export default function App() {
 	 park.style = { color: park.boroughColor }
 	 return park
   })
-    // parkData.parksFilteredForRatingSection.sort((a, b) =>
-		// 	a.name > b.name ? 1 : -1
-		// );
-
-  	// console.log('App - sortParksByName', sortParksByName);
 
 	return (
-		<div className='App'>
-			<main>
-				<Title />
-				<section id='left'>
-					<article id='left-top'>
-						<TopParks {...parkData} dispatch={dispatch} />
-					</article>
-				</section>
-				{isLoading ? (
-					''
-				) : (
-					<section id='right'>
-						<section id='top'>
-							<ParkImage activePark={parkData.activePark} />
-							<div id='map'>
-								<Map {...parkData} dispatch={dispatch} />
-								<div id='filters'>
-									<div id='court'>
-										<Input
-											activeInput={
-												parkData.parksFilteredForMap.length === 1
-													? parkData.activePark.name
-													: ''
-											}
-											dispatch={handleUserItemSelection}
-											dropDownItems={addStylesToDropDownItems}
-											label='Find A Court - all courts'
-											placeHolderText='park name'
-										/>
-									</div>
-									<div id='borough'>
-										<DropDown {...parkData} dispatch={dispatch} />
+		<DataContext.Provider value={parkData}>
+			<div className='App'>
+				<main>
+					<Title />
+					<section id='left'>
+						<article id='left-top'>
+							<ParksByRating {...parkData} dispatch={dispatch} />
+						</article>
+					</section>
+					{isLoading ? (
+						''
+					) : (
+						<section id='right'>
+							<section id='top'>
+								<ParkImage activePark={parkData.activePark} />
+								<div id='map'>
+									<Map {...parkData} dispatch={dispatch} />
+									<div id='filters'>
+										<div id='court'>
+											<Input
+												activeInput={
+													parkData.parksFilteredForMap.length === 1
+														? parkData.activePark.name
+														: ''
+												}
+												dispatch={handleUserItemSelection}
+												dropDownItems={addStylesToDropDownItems}
+												label='Find A Court - all courts'
+												placeHolderText='park name'
+											/>
+										</div>
+										<div id='borough'>
+											<DropDown {...parkData} dispatch={dispatch} />
+										</div>
 									</div>
 								</div>
-							</div>
+							</section>
 						</section>
+					)}
+					<section id='bottom'>
+						<div id='desc'>
+							<h3>Which Neighborhood Has The Best Pickup Games?</h3>
+							<p>
+								Bars represent{' '}
+								<span className='gray'>average neighborhood rating, </span>
+								circles are individual court ratings
+							</p>
+						</div>
+						<BarChart {...parkData} dispatch={dispatch} />
 					</section>
-				)}
-				<section id='bottom'>
-					<div id='desc'>
-						<h3>Which Neighborhood Has The Best Pickup Games?</h3>
-						<p>
-							Bars represent{' '}
-							<span className='gray'>average neighborhood rating, </span>circles
-							are individual court ratings
-						</p>
-					</div>
-					<BarChart {...parkData} dispatch={dispatch} />
-				</section>
-			</main>
-		</div>
+				</main>
+			</div>
+		</DataContext.Provider>
 	);
 }
