@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, createContext} from 'react';
+import React, { useEffect, useReducer, createContext } from 'react';
 import './styles.css';
 // COMPONENTS
 import ParksByRating from '../FilterCategoriesAndParksByRating/ParksByRating';
@@ -8,10 +8,6 @@ import Map from '../Map';
 import BarChart from '../BarChart/index_react';
 import DropDown from '../FilterByBoroughDropDown';
 import Input from '../FilterByUserSearchAndDropDown';
-// import BarChart from '../BarChart/index_d3'
-// HELPERS
-import { formatData } from '../../services/format/formatters';
-// import { colorLegendForParkText } from '../../services/legend';
 // CUSTOM HOOKS
 import useDataApi from '../../hooks/useDataApi';
 // REDUCERS
@@ -25,29 +21,28 @@ const initialState = {
 	activeRating: '',
 	allNestedData: [],
 	allParks: [],
-	// park: {},
 	parksFilteredForRatingSection: [],
 	neighborhood: [],
 	nestedData: [],
 	reset: false,
 };
 
+// CONTEXT
 export const DataContext = createContext();
 
 export default function App() {
 	const [parkData, dispatch] = useReducer(parkReducer, initialState);
-	console.log('App - parkData', parkData)
+	const store = {parkData, dispatch};
 
 	const [{ data, isLoading }] = useDataApi(
 		'https://spreadsheets.google.com/feeds/list/1EJ5k2hkdldEz7yrvWSvkCs3Hm6aCU4Po4zBH6nVYvhU/od6/public/values?alt=json'
 	);
 
-
 	useEffect(() => {
 		if (data.length) {
 			dispatch({
 				type: 'INITIAL_API_CALL',
-				payload: { data: formatData(data[0].feed.entry) },
+				payload: { data: data[0].feed.entry },
 			});
 		}
 	}, [data]);
@@ -56,19 +51,14 @@ export default function App() {
 		dispatch({ type: 'FILTER_ACTIVE_PARK_BY_INPUT', payload: { item } });
 	};
 
-  const addStylesToDropDownItems = parkData.parksFilteredForRatingSection.map( park => {
-	 park.style = { color: park.boroughColor }
-	 return park
-  })
-
 	return (
-		<DataContext.Provider value={parkData}>
+		<DataContext.Provider value={store}>
 			<div className='App'>
 				<main>
 					<Title />
 					<section id='left'>
 						<article id='left-top'>
-							<ParksByRating {...parkData} dispatch={dispatch} />
+							<ParksByRating />
 						</article>
 					</section>
 					{isLoading ? (
@@ -88,7 +78,7 @@ export default function App() {
 														: ''
 												}
 												dispatch={handleUserItemSelection}
-												dropDownItems={addStylesToDropDownItems}
+												dropDownItems={parkData.parksFilteredForRatingSection}
 												label='Find A Court - all courts'
 												placeHolderText='park name'
 											/>

@@ -2,13 +2,10 @@ import React, { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 import useDataApi from '../../hooks/useDataApi';
 import { boroughLegend } from '../../services/legend'
-// import DropDown from '../FilterByBoroughDropDown';
-// import Input from '../FilterByUserSearchAndDropDown';
 import Circles from './Circles';
 import './styles.css';
 
 const Map = (props) => {
-  // console.log('Map - props', props)
   const svgRef = useRef();
   const projRef = useRef(d3.geoMercator().center([-73.93, 40.72]).scale(57500));
   const pathRef = useRef();

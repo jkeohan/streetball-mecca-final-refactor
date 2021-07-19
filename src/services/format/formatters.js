@@ -1,16 +1,20 @@
-import { circleLegend } from '../legend';
-import * as d3 from 'd3';
-import { nest } from 'd3-collection';
+import { circleLegend, colorLegendForParkText } from '../legend';
 
-const formatData = (data) => {
+const formatAPIData = (data) => {
 
-  // console.log('formatData - data[0]', data[0]);
   return data.map((d, i) => {
+    console.log(
+			'formatAPIData',
+			colorLegendForParkText(d.gsx$borough.$t),
+			d.gsx$borough.$t
+		);
     return {
 			code: d.gsx$ntacode.$t,
 			name: d.gsx$name.$t,
 			borough: d.gsx$borough.$t,
-			boroughColor: circleLegend[d.gsx$borough.$t],
+			// no color is being applied here
+			boroughColor: colorLegendForParkText(d.gsx$borough.$t),
+			style: {color: colorLegendForParkText(d.gsx$borough.$t)},
 			overall: d.gsx$overall.$t,
 			url: d.gsx$url.$t,
 			lon: d.gsx$lon.$t,
@@ -24,43 +28,5 @@ const formatData = (data) => {
   });
 };
 
-const formatNestedData = (data) => {
-  // l in .rollup(l) is the nested array returned by .key()
-  return nest().key((d) => d.neighborhood).rollup((l) => ({
-      parks: l,
-      avg: d3.mean(l, (d) => d.overall),
-      borough: l[0].borough,
-      code: l[0]['code'],
-      ratings: l.map( d => d.rating)
-    }))
-    .entries(data)
-};
 
-export { formatData, formatNestedData };
-
-
-
-  // const boroughColors = {
-  //   Brooklyn: '#306A9C',
-  //   Manhattan: '#6DB099',
-  //   Bronx: '#F78154',
-  //   Queens: '#EAC435',
-  //   'Staten Island': '#CD7998'
-  // };
-
-// ORIGINAL FORMATNESTEDDATA FUNCTION
-// const formatNestedData = (data) => {
-//   // console.log('(f):nestingData - data', data)
-//   let nested = nest()
-//     .key( d => d.neighborhood)
-//    .rollup( l => ({
-//      'parks': l,
-//      'total': d3.sum(l, d =>  d.overall),
-//      'avg': d3.mean(l, d =>  d.overall),
-//      'borough': l[0].borough,
-//      'neighborhood' : l[0].neighborhood,
-//      'NTA': l[0]['NTA Code']
-//    })).entries(data)
-//   console.log('this is nested', nested)
-//   return nested
-// }
+export { formatAPIData };

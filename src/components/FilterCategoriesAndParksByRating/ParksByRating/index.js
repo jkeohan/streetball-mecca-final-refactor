@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import ParkRating from './ParkByRating'
 import ParkFilters from '../FilterCategories'
 import { circleLegend } from '../../../services/legend'
@@ -6,34 +6,28 @@ import './styles.css';
 
 import { DataContext } from '../../App';
 
-const TopParks = ({
-	parksFilteredForRatingSection,
-	handleUpdateActivePark,
-	activeRating,
-	dispatch,
-}) => {
-	
+const TopParks = () => {
+
+	const context = useContext(DataContext);
+
 	const parkFilters = circleLegend.domain().map((d, i) => {
 		return (
 			<ParkFilters
+			    activeRating={context.parkData.activeRating}
 				name={d}
 				color={circleLegend(d)}
-				activeRating={activeRating}
-				dispatch={dispatch}
-				className={d.toLocaleLowerCase()}
-				key={i}>
-				{/* {d} */}
-			</ParkFilters>
+				dispatch={context.dispatch}
+				key={i} 
+			/>
 		);
 	});
 
-	const renderParks = parksFilteredForRatingSection
+	const renderParks = context.parkData.parksFilteredForRatingSection
 		.sort((a, b) => +b.overall - +a.overall)
 		.map((d, i) => {
 			return (
 				<ParkRating
-					handleUpdateActivePark={handleUpdateActivePark}
-					dispatch={dispatch}
+					dispatch={context.dispatch}
 					key={i}
 					item={d}
 					active={d.active}

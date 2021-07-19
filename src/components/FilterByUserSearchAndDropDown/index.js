@@ -1,12 +1,11 @@
 import React, { useEffect, useState, useRef } from 'react';
 import './styles.css';
 
-const Input = ({ activeInput, dispatch, dropDownItems, placeHolderText }) => {
+const Input = ({ activeInput, dropDownItems, placeHolderText, dispatch }) => {
 	const [inputVal, setInputVal] = useState(activeInput ? activeInput : '');
 	const [isDropDownActive, setIsDropDownActive] = useState(false);
-	const [filteredDropDownChoices, setFilteredDropDownChoices] = useState(
-		dropDownItems
-	);
+	const [filteredDropDownChoices, setFilteredDropDownChoices] =
+		useState(dropDownItems);
 	const ref = useRef();
 
 	useEffect(() => {
@@ -52,7 +51,7 @@ const Input = ({ activeInput, dispatch, dropDownItems, placeHolderText }) => {
 			<div
 				key={index}
 				className='choice'
-				style={item.style ? item.style : ''}
+				style={item.style ? item.style : {}}
 				onClick={() => handleUserItemSelection(item)}>
 				{item.name}
 			</div>

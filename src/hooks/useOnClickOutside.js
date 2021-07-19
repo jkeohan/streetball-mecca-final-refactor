@@ -9,12 +9,11 @@ export default function useOnClickOutside(ref, handler) {
       const listener = event => {
         // Do nothing if clicking ref's element or descendent elements
         console.log('useOnClickOutside', ref, event.target);
-        // if (!ref.current || ref.current.contains(event.target)) {
-        //   return;
-        // }
+        if (!ref.current || ref.current.contains(event.target)) {
+          return;
+        }
 
         handler(event);
-        //  handler();
       };
 
       document.addEventListener('mousedown', listener);
@@ -24,6 +23,5 @@ export default function useOnClickOutside(ref, handler) {
       };
     },
     [ref]
-      // [ref, handler]
   );
 }

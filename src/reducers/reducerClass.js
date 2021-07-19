@@ -3,7 +3,6 @@ import { nest } from 'd3-collection';
 
 class ParkReducer {
 	constructor(state) {
-		this.state = state;
 		this.activePark = state.activePark;
 		this.parksFilteredForMap = state.parksFilteredForMap;
 		this.allNestedData = state.allNestedData;
@@ -18,11 +17,11 @@ class ParkReducer {
 	}
 	// 'INITIAL_API_CALL'
 	initializeDashboard(initialData) {
-		this.nestedData = this.formatNestedData(initialData);
 		this.activePark = this.sortParksByRating(initialData)[0];
 		this.parksFilteredForMap = initialData;
 		this.allNestedData = this.formatNestedData(initialData);
 		this.allParks = initialData;
+		this.nestedData = this.allNestedData
 		this.parksFilteredForRatingSection = initialData;
 
 		return this.updatedState();

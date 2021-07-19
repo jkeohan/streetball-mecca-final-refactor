@@ -1,5 +1,6 @@
-import { colorLegendForParkText } from '../services/legend';
 import ParkReducerClass from './reducerClass'
+// HELPERS
+import { formatAPIData } from '../services/format/formatters';
 
 const reducer = (state, action) => {
 
@@ -7,11 +8,7 @@ const reducer = (state, action) => {
 
 	switch (action.type) {
 		case 'INITIAL_API_CALL':
-			const allParks = action.payload.data.map((d) => {
-				d.boroughColor = colorLegendForParkText(d.borough);
-				return d;
-			});
-			return ParkReducer.initializeDashboard(allParks);
+		    return ParkReducer.initializeDashboard(formatAPIData(action.payload.data));
 
 		case 'FILTER_ACTIVE_RATING_OR_BOROUGH':
 			return ParkReducer.filterDashboardByActiveRatingAndBorough(action.payload);
@@ -35,5 +32,6 @@ const reducer = (state, action) => {
 			return state;
 	}
 };
+
 
 export default reducer;
