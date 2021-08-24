@@ -43,6 +43,7 @@ export default function App() {
 	// );
 
 	useEffect(() => {
+		console.log('App - useEffect - data', data)
 		if (data.values.length) {
 			console.log('App - data', data);
 			dispatch({

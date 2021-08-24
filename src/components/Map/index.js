@@ -16,6 +16,7 @@ const Map = (props) => {
   );
 
   useEffect(() => {
+    console.log('Map - useEffect - data', data)
     const height = svgRef.current.clientHeight;
     const width = svgRef.current.clientWidth;
 

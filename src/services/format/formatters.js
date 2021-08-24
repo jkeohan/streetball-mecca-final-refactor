@@ -8,10 +8,10 @@ const formatAPIData = (data) => {
 		// 		colorLegendForParkText(d.gsx$borough.$t),
 		// 		d.gsx$borough.$t
 		// 	);
-		console.log(
-				'formatAPIData',
-				d[14]
-			);
+		// console.log(
+		// 		'formatAPIData',
+		// 		d[14]
+		// 	);
 
 		return {
 			code: d[9],
