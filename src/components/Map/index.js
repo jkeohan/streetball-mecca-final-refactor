@@ -16,7 +16,7 @@ const Map = (props) => {
   );
 
   useEffect(() => {
-    console.log('Map - useEffect - data', data)
+    // console.log('Map - useEffect - data', data)
     const height = svgRef.current.clientHeight;
     const width = svgRef.current.clientWidth;
 
@@ -30,9 +30,12 @@ const Map = (props) => {
   }, [data]);
 
   const renderChart = () => {
+    // console.log('Map - renderChart - data', data);
     const path = d3.geoPath().projection(projRef.current);
-    return data[0].features.map((d, i) => {
+    // return data[0].features.map((d, i) => {
+    return data.features.map((d, i) => {
       const featurePath = path(d);
+      // console.log('Map - renderChart - data', data)
       return (
         <path
           key={i}
@@ -45,17 +48,18 @@ const Map = (props) => {
   };
 
   return (
-    <>
-      <svg id="boroughs-map" ref={svgRef}>
-        {data.length && renderChart()}
-        <Circles {...props} projection={projRef.current} />
-      </svg>
-      <article id="mapCountyToolTip"></article>
-      <button onClick={() => props.dispatch({ type: 'RESET' })} id="reset">
-        Reset
-      </button>
+		<>
+			<svg id='boroughs-map' ref={svgRef}>
+				{data.features && renderChart()}
+				{/* {renderChart()} */}
+				<Circles {...props} projection={projRef.current} />
+			</svg>
+			<article id='mapCountyToolTip'></article>
+			<button onClick={() => props.dispatch({ type: 'RESET' })} id='reset'>
+				Reset
+			</button>
 
-      {/* <div id="filters">
+			{/* <div id="filters">
         <div id="court">
           <Input {...props} />
         </div>
@@ -63,8 +67,8 @@ const Map = (props) => {
           <DropDown {...props} />
         </div>
       </div> */}
-    </>
-  );
+		</>
+	);
 };
 
 export default Map;
