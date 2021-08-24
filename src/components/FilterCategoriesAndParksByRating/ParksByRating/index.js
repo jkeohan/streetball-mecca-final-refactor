@@ -11,7 +11,8 @@ const TopParks = () => {
 	// const context = useContext(DataContext);
 	const {parkData, dispatch} = useContext(DataContext);
 
-	const parkFilters = circleLegend.domain().map((d, i) => {
+	const parkFilters = circleLegend.domain().splice(0,3).map( (d, i) => {
+		console.log('FilterCategoriesAndParksByRating - d', d, parkData)
 		return (
 			<ParkFilters
 			    activeRating={parkData.activeRating}

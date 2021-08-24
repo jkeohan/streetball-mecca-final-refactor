@@ -17,6 +17,7 @@ class ParkReducer {
 	}
 	// 'INITIAL_API_CALL'
 	initializeDashboard(initialData) {
+		console.log('ParkReducer - initialData', initialData)
 		this.activePark = this.sortParksByRating(initialData)[0];
 		this.parksFilteredForMap = initialData;
 		this.allNestedData = this.formatNestedData(initialData);
@@ -28,6 +29,7 @@ class ParkReducer {
 	}
 	// 'FILTER_ACTIVE_RATING_OR_BOROUGH'
 	filterDashboardByActiveRatingAndBorough(payload) {
+		// console.log('reducerClass - filterDashboardByActiveRatingAndBorough - payload', payload);
 		this.setRatingAndBorough(payload);
 		this.setParksFilteredForMapAndRatingSection();
 		this.filterNeighborhoodsByRatingAndBorough();

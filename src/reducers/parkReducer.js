@@ -8,9 +8,11 @@ const reducer = (state, action) => {
 
 	switch (action.type) {
 		case 'INITIAL_API_CALL':
+			// console.log('parkReducer - action.payload.data', action.payload.data);
 		    return ParkReducer.initializeDashboard(formatAPIData(action.payload.data));
 
 		case 'FILTER_ACTIVE_RATING_OR_BOROUGH':
+			// console.log('parkReducer - action.payload.data',action.payload);
 			return ParkReducer.filterDashboardByActiveRatingAndBorough(action.payload);
 
 		case 'FILTER_ACTIVE_PARK':

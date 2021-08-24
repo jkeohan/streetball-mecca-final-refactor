@@ -17,8 +17,9 @@ const useDataApi = (initialUrl) => {
           try {
             const res = await fetch(url);
             const json = await res.json();
-            setData([json]);
-            localStorage.setItem(initialUrl, JSON.stringify([json]));
+            console.log('useDataApi - json', json)
+            setData(json);
+            localStorage.setItem(initialUrl, JSON.stringify(json));
           } catch (err) {
             console.log('err', err);
           }

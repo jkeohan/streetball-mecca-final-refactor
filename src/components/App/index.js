@@ -32,17 +32,23 @@ export const DataContext = createContext();
 
 export default function App() {
 	const [parkData, dispatch] = useReducer(parkReducer, initialState);
-	const store = {parkData, dispatch};
+	const store = { parkData, dispatch };
 
-	const [{ data, isLoading }] = useDataApi(
-		'https://spreadsheets.google.com/feeds/list/1EJ5k2hkdldEz7yrvWSvkCs3Hm6aCU4Po4zBH6nVYvhU/od6/public/values?alt=json'
+	const [{ data, isLoading } ] = useDataApi(
+		'https://sheets.googleapis.com/v4/spreadsheets/1EJ5k2hkdldEz7yrvWSvkCs3Hm6aCU4Po4zBH6nVYvhU/values/Sheet1?alt=json&key=AIzaSyBxGxWMipV5iwKgX3IXdBRvL3bUw9Vch7A'
 	);
 
+	// const [{ data, isLoading }] = useDataApi(
+	// 	'https://spreadsheets.google.com/feeds/list/1EJ5k2hkdldEz7yrvWSvkCs3Hm6aCU4Po4zBH6nVYvhU/od6/public/values?alt=json'
+	// );
+
 	useEffect(() => {
-		if (data.length) {
+		if (data.values.length) {
+			console.log('App - data', data);
 			dispatch({
 				type: 'INITIAL_API_CALL',
-				payload: { data: data[0].feed.entry },
+				payload: { data: data.values }
+				// payload: { data: data[0].feed.entry },
 			});
 		}
 	}, [data]);
