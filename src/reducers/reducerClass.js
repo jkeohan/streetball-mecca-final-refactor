@@ -98,7 +98,7 @@ class ParkReducer {
 			return d;
 		});
 		this.nestedData = this.allNestedData;
-		this.parksFilteredForMap = this.state.allParks;
+		this.parksFilteredForMap = this.allParks;
 		this.activePark = this.sortParksByRating(
 			this.parksFilteredForRatingSection
 		)[0];

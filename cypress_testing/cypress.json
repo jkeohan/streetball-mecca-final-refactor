@@ -1,0 +1,4 @@
+{
+    "baseUrl": "http://localhost:3000",
+    "waitAfterEachCommand": "2000"
+}

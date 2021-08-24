@@ -1,0 +1,12 @@
+{
+  "name": "100% Playground",
+  "neighborhood": "Canarsie",
+  "active": true,
+  "borough": "Brooklyn",
+  "boroughColor": "rgba(48,106,156,1)",
+  "code": "BK50",
+  "color": "rgba(255,190,122,1)",
+  "overall": "56",
+  "rating": "Mediocre",
+  "url": "https://i.imgur.com/Lf9pHxU.jpg"
+}

@@ -8,26 +8,27 @@ import { DataContext } from '../../App';
 
 const TopParks = () => {
 
-	const context = useContext(DataContext);
+	// const context = useContext(DataContext);
+	const {parkData, dispatch} = useContext(DataContext);
 
 	const parkFilters = circleLegend.domain().map((d, i) => {
 		return (
 			<ParkFilters
-			    activeRating={context.parkData.activeRating}
+			    activeRating={parkData.activeRating}
 				name={d}
 				color={circleLegend(d)}
-				dispatch={context.dispatch}
+				dispatch={dispatch}
 				key={i} 
 			/>
 		);
 	});
 
-	const renderParks = context.parkData.parksFilteredForRatingSection
+	const renderParks = parkData.parksFilteredForRatingSection
 		.sort((a, b) => +b.overall - +a.overall)
 		.map((d, i) => {
 			return (
 				<ParkRating
-					dispatch={context.dispatch}
+					dispatch={dispatch}
 					key={i}
 					item={d}
 					active={d.active}
